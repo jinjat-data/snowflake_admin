@@ -1,0 +1,48 @@
+version: 2
+
+analyses:
+  - name: _list_procedures
+  - name: _get_procedure
+    description: "Show a procedure"
+    config:
+      jinjat:
+        method: get
+        response: 
+          transform: "[0]"
+    columns:
+          - name: PROCEDURE_NAME
+            description: Name of the stored procedure
+          - name: PROCEDURE_OWNER
+            description: Name of the role that owns the stored procedure
+          - name: ARGUMENT_SIGNATURE
+            description: Type signature of the stored procedure’s arguments
+          - name: DATA_TYPE
+            description: Return value data type
+          - name: PROCEDURE_LANGUAGE
+            description: Language of the stored procedure
+          - name: PROCEDURE_DEFINITION
+            description: Stored procedure definition
+            meta: 
+              jinjat:
+                crud:
+                  filterable: false
+                  sortable: false
+          - name: CREATED
+            description: Creation time of the stored procedure
+          - name: LAST_ALTERED
+            description: Last altered time of the stored procedure
+          - name: COMMENT
+            description: Comment for this stored procedure
+  - name: _trigger_procedure
+    description: Trigger a procedure
+    config:
+      jinjat:
+        method: put
+        response:
+          content:
+            description: Returns the called procedure, the response is defined in the procedure signature
+        request:
+          body:
+            type: object
+            description: The procedure function signature
+    

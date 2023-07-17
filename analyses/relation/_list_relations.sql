@@ -1,0 +1,14 @@
+select 
+    TABLE_NAME,
+    TABLE_OWNER,
+    TABLE_TYPE,
+    ROW_COUNT,
+    CLUSTERING_KEY,
+    BYTES,
+    RETENTION_TIME,
+    CREATED,
+    LAST_ALTERED,
+    AUTO_CLUSTERING_ON,
+    COMMENT
+ from 
+    information_schema.tables

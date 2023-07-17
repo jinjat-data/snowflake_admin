@@ -1,0 +1,273 @@
+version: 2
+
+exposures:
+  - name: tasks
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat: 
+        refine: 
+          menu_icon: AutoAwesome
+          actions:
+            delete: _delete_task
+            trigger: trigger_task
+            history: task_history
+          resources:
+            create: _create_task
+            list: _list_tasks
+            show: _get_task
+            edit: _edit_task
+
+analyses:
+  - name: _get_task
+    description: "Get a task"
+    config:
+      jinjat:
+        method: get
+        transform_response: "[0]"
+        request_schema:
+          query:
+            id:
+              type: string
+        response_schema:
+          $ref: analysis._get_task
+    columns:
+      - name: created_on
+        description: "The timestamp when the task was created"
+        meta: &nonindexed
+          jinjat:
+            crud:
+              filterable: false
+              sortable: false
+      - name: name
+        description: "The name of the task"
+        meta: *nonindexed
+      - name: id
+        description: "The unique identifier of the task"
+        tests:
+          - not_null
+        meta: *nonindexed
+      - name: database_name
+        description: "The name of the database"
+        tests:
+          - not_null
+        meta: *nonindexed
+      - name: schema_name
+        description: "The name of the schema"
+        tests:
+          - not_null
+        meta: *nonindexed
+      - name: owner
+        description: "The owner of the task"
+        tests:
+          - not_null
+        meta: *nonindexed
+      - name: comment
+        description: "Additional comments about the task"
+        meta: *nonindexed
+      - name: warehouse
+        description: "The warehouse to run the task"
+        tests:
+          - not_null
+        meta: *nonindexed
+      - name: schedule
+        description: "The schedule of the task"
+        tests:
+          - not_null
+        meta:
+          jinjat:
+            crud:
+              filterable: false
+              sortable: false
+            schema:
+              example: |
+                USING CRON 0 1 1 1 1 America/Los_Angeles
+      - name: predecessors
+        description: "The list of predecessor tasks"
+        meta: *nonindexed
+      - name: state
+        description: "The state of the task"
+        tests:
+          - not_null
+        meta:
+          example: "suspended"
+      - name: definition
+        description: "The SQL definition of the task"
+        tests:
+          - not_null
+        meta: *nonindexed
+      - name: condition
+        description: "The condition for task execution"
+        meta: *nonindexed
+      - name: allow_overlapping_execution
+        description: "Whether overlapping execution is allowed"
+        meta: *nonindexed
+        tests:
+          - not_null
+      - name: error_integration
+        description: "The integration for error reporting"
+        meta: *nonindexed
+      - name: last_committed_on
+        description: "The timestamp when the task was last committed"
+        tests:
+          - not_null
+        meta: *nonindexed
+      - name: last_suspended_on
+        description: "The timestamp when the task was last suspended"
+        tests:
+          - not_null
+        meta: *nonindexed
+
+  - name: _list_tasks
+    description: "List tasks in the current database"
+    config:
+      jinjat:
+        method: get
+        request:
+          query:
+            name:
+              type: string
+          body: null
+          headers: null
+          transform: null
+        response:
+          content:
+            $ref: analysis._get_task
+  - name: _create_task
+    description: "Create task"
+    config:
+      jinjat:
+        method: post
+        request:
+          body:
+            type: object
+            properties:
+              name:
+                type: "string"
+                description: "Name of the task."
+              warehouse:
+                type: "string"
+                description: "Warehouse where the task will be created."
+              schedule:
+                type: "string"
+                description: "Cron schedule for the task."
+              timestamp:
+                type: "string"
+                default: "UTC"
+                description: "Timezone for the task schedule. Defaults to UTC."
+              config:
+                type: "string"
+                description: "Configuration settings for the task."
+              allow_overlapping_execution:
+                type: "boolean"
+                description: "Defines whether overlapping executions are allowed."
+                default: true
+              timeout_ms:
+                type: "integer"
+                description: "Timeout for the task execution in milliseconds."
+              suspect_after_num_tries:
+                type: "integer"
+                description: "Number of failed tries after which the task is suspended."
+              error_integration:
+                type: "string"
+                description: "Integration used for error reporting."
+              comment:
+                type: "string"
+                description: "Comment or note about the task."
+              condition:
+                type: "string"
+                description: "Condition under which the task is executed."
+              definition:
+                type: "string"
+                description: "SQL Definition of the task."
+            required: 
+              - "name"
+              - "schedule"
+              - "allow_overlapping_execution"
+              - "timeout_ms"
+              - "suspect_after_num_tries"
+              - "error_integration"
+              - "definition"
+        response:
+          content:
+            type: object
+            properties:
+              id:
+                type: string
+                optional: true
+  - name: _delete_task
+    description: "Delete task"
+    config:
+      jinjat:
+        method: delete
+        request:
+          query:
+            id:
+              type: string
+  - name: _edit_task
+    description: "Edit exiting task"
+    config:
+      jinjat:
+        method: post
+        request:
+          body:
+            $ref: analysis._get_task
+  - name: trigger_task
+    description: "Execute the task manually"
+    config:
+      jinjat:
+        method: put
+        request:
+          query:
+            id:
+              type: string
+  - name: task_history
+    description: "The previous runs for the task"
+    config:
+      jinjat:
+        method: put
+        request:
+          query:
+            id:
+              type: string
+      columns:
+        - name: query_id
+          description: "The unique identifier of the query"
+        - name: name
+          description: "The name of the query"
+        - name: database_name
+          description: "The name of the database"
+        - name: schema_name
+          description: "The name of the schema"
+        - name: query_text
+          description: "The SQL text of the query"
+        - name: condition_text
+          description: "The condition text of the query"
+        - name: state
+          description: "The state of the query"
+          meta:
+            example: "SUCCEEDED"
+        - name: error_code
+          description: "The error code, if the query failed"
+        - name: error_message
+          description: "The error message, if the query failed"
+        - name: scheduled_time
+          description: "The scheduled time of the query"
+        - name: query_start_time
+          description: "The start time of the query"
+        - name: next_scheduled_time
+          description: "The next scheduled time of the query"
+        - name: completed_time
+          description: "The completed time of the query"
+        - name: root_task_id
+          description: "The root task ID"
+        - name: graph_version
+          description: "The graph version"
+        - name: run_id
+          description: "The run ID of the query"
+        - name: return_value
+          description: "The return value of the query"
+        - name: scheduled_from
+          description: "The source of the scheduled task"

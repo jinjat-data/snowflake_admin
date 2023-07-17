@@ -1,0 +1,14 @@
+cors:
+  allowed_origins:
+    - "http://127.0.0.1:3001"
+    - "http:/localhost:3001"
+
+refine:
+  importmaps:
+    - https://www.unpkg.com/@mui/material@5.11.15
+  jsonforms:
+    renderers:
+      rating: "@mui/material/Rating"
+  search:
+    open_api_key: null
+    analysis: search

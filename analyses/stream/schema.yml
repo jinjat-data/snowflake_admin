@@ -1,0 +1,13 @@
+version: 2
+
+analyses:
+  - name: _create_stream
+    config:
+      jinjat: 
+        request:
+          body: 
+            type: object
+            properties:
+              on_resource: 
+                type: string
+                enum: ["TABLE", "VIEW", "EXTERNAL TABLE", "STAGE"]

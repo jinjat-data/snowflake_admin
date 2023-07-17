@@ -1,0 +1,28 @@
+{
+    "dbt.queryLimit": 500,
+    "yaml.schemas": {
+        "../jsonschema/jinjat_yml_files.json": [
+            "jinjat_project.yml"
+        ],
+        "/Users/bkabak/Code/jinjat/snowflake_admin/test.json": [
+            "models/**/*.yml",
+            "seeds/**/*.yml", 
+            "macros/**/*.yml",
+            "analyses/**/*.yml" 
+        ],
+        "https://raw.githubusercontent.com/dbt-labs/dbt-jsonschema/main/schemas/dbt_yml_files.json": [
+            "models/**/*.yml",
+            "seeds/**/*.yml",
+            "macros/**/*.yml",
+        ],
+        "https://raw.githubusercontent.com/dbt-labs/dbt-jsonschema/main/schemas/dbt_project.json": [
+            "dbt_project.yml"
+        ],
+        "https://raw.githubusercontent.com/dbt-labs/dbt-jsonschema/main/schemas/selectors.json": [
+            "selectors.yml"
+        ],
+        "https://raw.githubusercontent.com/dbt-labs/dbt-jsonschema/main/schemas/packages.json": [
+            "packages.yml"
+        ]
+    }
+}
