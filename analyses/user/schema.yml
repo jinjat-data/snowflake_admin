@@ -1,0 +1,237 @@
+version: 2
+
+exposures:
+  - name: users
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/user_circle
+          actions:
+            delete: _delete_user
+          resources:
+            create: _create_user
+            list: _list_users
+            show: _show_user
+            edit: _edit_user
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      name: true
+                      created_on: false
+                      login_name: false
+                      display_name: false
+                      first_name: false
+                      last_name: false
+                      email: true
+                      mins_to_unlock: false
+                      days_to_expiry: false
+                      comment: false
+                      disabled: true
+                      must_change_password: false
+                      snowflake_lock: false
+                      default_warehouse: false
+                      default_namespace: false
+                      default_role: false
+                      default_secondary_roles: false
+                      ext_authn_duo: false
+                      ext_authn_uid: false
+                      mins_to_bypass_mfa: false
+                      owner: false
+                      last_success_login: true
+                      expires_at_time: false
+                      locked_until_time: false
+                      has_password: false
+                      has_rsa_public_key: false
+
+
+analyses:
+  - name: _create_user
+    description: "List users"
+    config:
+      tags: [user]
+      jinjat:
+        method: post
+        fetch: true
+        request:
+          body:
+            type: object
+            required:
+              - LOGIN_NAME
+              - PASSWORD
+              - EMAIL
+            properties:
+              PASSWORD:
+                type: string
+                format: password
+                description: User's password
+              LOGIN_NAME:
+                type: string
+                description: User's login name
+              DISPLAY_NAME:
+                type: string
+                description: User's display name
+              FIRST_NAME:
+                type: string
+                description: User's first name
+              MIDDLE_NAME:
+                type: string
+                description: User's middle name
+              LAST_NAME:
+                type: string
+                description: User's last name
+              EMAIL:
+                type: string
+                format: email
+                description: User's email address
+              MUST_CHANGE_PASSWORD:
+                type: boolean
+                description: Flag indicating if the user must change the password at next login
+              DISABLED:
+                type: boolean
+                description: Flag indicating if the user account is disabled
+              DAYS_TO_EXPIRY:
+                type: integer
+                format: int32
+                description: Number of days until the user's password expires
+              MINS_TO_UNLOCK:
+                type: integer
+                format: int32
+                description: Number of minutes to wait before the user account is unlocked
+              DEFAULT_WAREHOUSE:
+                type: string
+                description: User's default warehouse
+              DEFAULT_NAMESPACE:
+                type: string
+                description: User's default namespace
+              DEFAULT_ROLE:
+                type: string
+                description: User's default role
+              DEFAULT_SECONDARY_ROLES:
+                type: array
+                items:
+                  type: string
+                description: User's default secondary roles
+              MINS_TO_BYPASS_MFA:
+                type: integer
+                format: int32
+                description: Number of minutes to bypass multi-factor authentication
+              RSA_PUBLIC_KEY:
+                type: string
+                description: User's RSA public key
+              RSA_PUBLIC_KEY_2:
+                type: string
+                description: User's second RSA public key
+              COMMENT:
+                type: string
+                description: Comment about the user
+
+  - name: _show_user
+    description: "Show users"
+    config:
+      tags: [user]
+      jinjat:
+        method: get
+        response:
+        
+  - name: _edit_user
+    description: "List users"
+    config:
+      tags: [user]
+      jinjat:
+        method: get
+  - name: _list_users
+    description: "List users"
+    config:
+      tags: [user]
+      jinjat:
+        method: get
+    columns:
+      - name: name
+        description: User's name
+        data_type: text
+        meta:
+          jinjat:
+            schema:
+              x-pk: true 
+      - name: created_on
+        description: Date and time when the user was created
+        data_type: timestamp_ltz
+      - name: login_name
+        description: User's login name
+        data_type: text
+      - name: display_name
+        description: User's display name
+        data_type: text
+      - name: first_name
+        description: User's first name
+        data_type: text
+      - name: last_name
+        description: User's last name
+        data_type: text
+      - name: email
+        description: User's email address
+        data_type: text
+      - name: mins_to_unlock
+        description: Minutes to unlock the account
+        data_type: text
+      - name: days_to_expiry
+        description: Days until password expiration
+        data_type: text
+      - name: comment
+        description: User's comment or description
+        data_type: text
+      - name: disabled
+        description: Indicates if the user is disabled
+        data_type: boolean
+      - name: must_change_password
+        description: Indicates if the user must change their password
+        data_type: boolean
+      - name: snowflake_lock
+        description: Indicates if the user is locked in Snowflake
+        data_type: boolean
+      - name: default_warehouse
+        description: User's default warehouse
+        data_type: text
+      - name: default_namespace
+        description: User's default namespace
+        data_type: text
+      - name: default_role
+        description: User's default role
+        data_type: text
+      - name: default_secondary_roles
+        description: User's default secondary roles
+        data_type: text
+      - name: ext_authn_duo
+        description: Indicates if external authentication (Duo) is enabled
+        data_type: boolean
+      - name: ext_authn_uid
+        description: User's external authentication UID
+        data_type: text
+      - name: mins_to_bypass_mfa
+        description: Minutes to bypass multi-factor authentication
+        data_type: text
+      - name: owner
+        description: User who owns the account
+        data_type: text
+      - name: last_success_login
+        description: Date and time of the last successful login
+        data_type: timestamp_ltz
+      - name: expires_at_time
+        description: Date and time when the account expires (null if not set)
+        data_type: timestamp_ltz
+      - name: locked_until_time
+        description: Date and time until which the account is locked (null if not locked)
+        data_type: timestamp_ltz
+      - name: has_password
+        description: Indicates if the user has a password
+        data_type: boolean
+      - name: has_rsa_public_key
+        description: Indicates if the user has an RSA public key
+        data_type: boolean

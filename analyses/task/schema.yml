@@ -7,9 +7,9 @@ exposures:
       name: Burak
       email: burak@email.com
     meta:
-      jinjat: 
-        refine: 
-          menu_icon: AutoAwesome
+      jinjat:
+        refine:
+          menu_icon: heroicons/archive_box
           actions:
             delete: _delete_task
             trigger: trigger_task
@@ -19,23 +19,46 @@ exposures:
             list: _list_tasks
             show: _get_task
             edit: _edit_task
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+                      name: false
+                      id: false
+                      owner: false
+                      database_name: false
+                      predecessors: false
+                      definition: false
+                      condition: false
+                      allow_overlapping_execution: false
+                      error_integration: false
+                      last_committed_on: false
+                      created_on: false
+                      comment: false
 
 analyses:
   - name: _get_task
     description: "Get a task"
     config:
+      tags: [task]
       jinjat:
         method: get
-        transform_response: "[0]"
-        request_schema:
-          query:
-            id:
-              type: string
-        response_schema:
-          $ref: analysis._get_task
+        response:
+          content:
+            $ref: analysis._get_task
+          transform: "[0]"
+    constraints:
+      - type: primary_key
+        columns: [name]
+      - type: foreign_key
+        expression: "ref('_list_warehouses')"
     columns:
       - name: created_on
         description: "The timestamp when the task was created"
+        data_type: timestamp_ltz
         meta: &nonindexed
           jinjat:
             crud:
@@ -43,39 +66,56 @@ analyses:
               sortable: false
       - name: name
         description: "The name of the task"
-        meta: *nonindexed
+        data_type: text
+        meta:
+          jinjat:
+            crud:
+              filterable: false
+              sortable: false
+            schema:
+              x-pk: true
       - name: id
         description: "The unique identifier of the task"
-        tests:
-          - not_null
+        data_type: text
+        constraints:
+          - type: not_null
         meta: *nonindexed
       - name: database_name
         description: "The name of the database"
+        data_type: string
         tests:
           - not_null
         meta: *nonindexed
       - name: schema_name
         description: "The name of the schema"
+        data_type: text
         tests:
           - not_null
         meta: *nonindexed
       - name: owner
         description: "The owner of the task"
+        data_type: text
         tests:
           - not_null
         meta: *nonindexed
       - name: comment
         description: "Additional comments about the task"
+        data_type: string
         meta: *nonindexed
       - name: warehouse
         description: "The warehouse to run the task"
+        data_type: text
         tests:
           - not_null
-        meta: *nonindexed
+        meta:
+          jinjat:
+            crud:
+              filterable: false
+              sortable: false
+            enum: _list_warehouses
       - name: schedule
         description: "The schedule of the task"
-        tests:
-          - not_null
+        data_type: text
         meta:
           jinjat:
             crud:
@@ -86,58 +126,68 @@ analyses:
                 USING CRON 0 1 1 1 1 America/Los_Angeles
       - name: predecessors
         description: "The list of predecessor tasks"
+        data_type: text
         meta: *nonindexed
       - name: state
         description: "The state of the task"
+        data_type: text
         tests:
           - not_null
         meta:
           example: "suspended"
       - name: definition
         description: "The SQL definition of the task"
-        tests:
-          - not_null
-        meta: *nonindexed
+        data_type: text
+        meta:
+          jinjat:
+            crud:
+              filterable: false
+              sortable: false
+            schema:
+              x-jsonforms:
+                renderer: code
+
       - name: condition
         description: "The condition for task execution"
+        data_type: text
         meta: *nonindexed
       - name: allow_overlapping_execution
         description: "Whether overlapping execution is allowed"
+        data_type: boolean
         meta: *nonindexed
-        tests:
-          - not_null
       - name: error_integration
         description: "The integration for error reporting"
+        data_type: text
         meta: *nonindexed
       - name: last_committed_on
         description: "The timestamp when the task was last committed"
-        tests:
-          - not_null
+        data_type: text
         meta: *nonindexed
       - name: last_suspended_on
         description: "The timestamp when the task was last suspended"
-        tests:
-          - not_null
+        data_type: timestamp_ltz
         meta: *nonindexed
 
   - name: _list_tasks
     description: "List tasks in the current database"
     config:
+      tags: [task]
       jinjat:
         method: get
         request:
-          query:
-            name:
-              type: string
-          body: null
-          headers: null
-          transform: null
+          parameters:
+            - name: query
+              in: query
+              schema:
+                type: text
+              required: false
         response:
           content:
             $ref: analysis._get_task
   - name: _create_task
     description: "Create task"
     config:
+      tags: [task]
       jinjat:
         method: post
         request:
@@ -147,42 +197,34 @@ analyses:
               name:
                 type: "string"
                 description: "Name of the task."
+              definition:
+                type: "string"
+                description: "SQL Definition of the task."
+                x-jsonforms:
+                  renderer: code
               warehouse:
                 type: "string"
-                description: "Warehouse where the task will be created."
+                description: "Warehouse where the task will be run."
+                meta:
+                  jinjat:
+                    enum: _list_warehouses
               schedule:
                 type: "string"
                 description: "Cron schedule for the task."
-              timestamp:
-                type: "string"
+              timezone:
+                type: string
                 default: "UTC"
                 description: "Timezone for the task schedule. Defaults to UTC."
               config:
                 type: "string"
                 description: "Configuration settings for the task."
-              allow_overlapping_execution:
-                type: "boolean"
-                description: "Defines whether overlapping executions are allowed."
-                default: true
               timeout_ms:
                 type: "integer"
                 description: "Timeout for the task execution in milliseconds."
-              suspect_after_num_tries:
-                type: "integer"
-                description: "Number of failed tries after which the task is suspended."
-              error_integration:
-                type: "string"
-                description: "Integration used for error reporting."
               comment:
                 type: "string"
                 description: "Comment or note about the task."
-              condition:
-                type: "string"
-                description: "Condition under which the task is executed."
-              definition:
-                type: "string"
-                description: "SQL Definition of the task."
-            required: 
+            required:
               - "name"
               - "schedule"
               - "allow_overlapping_execution"
@@ -200,15 +242,19 @@ analyses:
   - name: _delete_task
     description: "Delete task"
     config:
+      tags: [task]
       jinjat:
         method: delete
         request:
           query:
             id:
-              type: string
+              schema:
+                type: string
+              required: true
   - name: _edit_task
     description: "Edit exiting task"
     config:
+      tags: [task]
       jinjat:
         method: post
         request:
@@ -217,21 +263,29 @@ analyses:
   - name: trigger_task
     description: "Execute the task manually"
     config:
+      tags: [task]
       jinjat:
         method: put
         request:
-          query:
-            id:
-              type: string
+          parameters:
+            - name: query
+              in: query
+              schema:
+                type: string
+              required: true
   - name: task_history
     description: "The previous runs for the task"
     config:
+      tags: [task]
       jinjat:
         method: put
         request:
-          query:
-            id:
-              type: string
+          parameters:
+            - name: query
+              in: query
+              schema:
+                type: string
+              required: true
       columns:
         - name: query_id
           description: "The unique identifier of the query"

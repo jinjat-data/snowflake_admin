@@ -1,0 +1,19 @@
+version: 2
+
+exposures:
+  - name: alerts
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/bell
+          actions:
+            delete: _delete_user
+          resources:
+            create: _create_user
+            list: _list_users
+            show: _show_user
+            edit: _edit_user

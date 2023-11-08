@@ -1,41 +1,74 @@
 version: 2
 
+exposures:
+  - name: procedures
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/code_bracket_square
+          resources:
+            list: _list_procedures
+            show: _show_procedure
+          actions:
+            trigger: trigger_procedure
+        props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
 analyses:
   - name: _list_procedures
-  - name: _get_procedure
     description: "Show a procedure"
     config:
+      tags: [procedure]
       jinjat:
         method: get
-        response: 
+        response:
+          $ref: analysis._show_procedure
+  - name: _show_procedure
+    description: "Show a procedure"
+    config:
+      tags: [procedure]
+      jinjat:
+        method: get
+        response:
           transform: "[0]"
     columns:
-          - name: PROCEDURE_NAME
-            description: Name of the stored procedure
-          - name: PROCEDURE_OWNER
-            description: Name of the role that owns the stored procedure
-          - name: ARGUMENT_SIGNATURE
-            description: Type signature of the stored procedure’s arguments
-          - name: DATA_TYPE
-            description: Return value data type
-          - name: PROCEDURE_LANGUAGE
-            description: Language of the stored procedure
-          - name: PROCEDURE_DEFINITION
-            description: Stored procedure definition
-            meta: 
-              jinjat:
-                crud:
-                  filterable: false
-                  sortable: false
-          - name: CREATED
-            description: Creation time of the stored procedure
-          - name: LAST_ALTERED
-            description: Last altered time of the stored procedure
-          - name: COMMENT
-            description: Comment for this stored procedure
+      - name: PROCEDURE_NAME
+        description: Name of the stored procedure
+      - name: PROCEDURE_OWNER
+        description: Name of the role that owns the stored procedure
+      - name: ARGUMENT_SIGNATURE
+        description: Type signature of the stored procedure’s arguments
+      - name: DATA_TYPE
+        description: Return value data type
+      - name: PROCEDURE_LANGUAGE
+        description: Language of the stored procedure
+      - name: PROCEDURE_DEFINITION
+        description: Stored procedure definition
+        meta:
+          jinjat:
+            crud:
+              filterable: false
+              sortable: false
+      - name: CREATED
+        description: Creation time of the stored procedure
+      - name: LAST_ALTERED
+        description: Last altered time of the stored procedure
+      - name: COMMENT
+        description: Comment for this stored procedure
+
   - name: _trigger_procedure
     description: Trigger a procedure
     config:
+      tags: [procedure]
       jinjat:
         method: put
         response:
@@ -45,4 +78,3 @@ analyses:
           body:
             type: object
             description: The procedure function signature
-    

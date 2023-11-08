@@ -24,5 +24,10 @@
         "https://raw.githubusercontent.com/dbt-labs/dbt-jsonschema/main/schemas/packages.json": [
             "packages.yml"
         ]
-    }
+    },
+    "turntable.dbtVersion": "1.5",
+    "turntable.warehouse": "snowflake",
+    "dbt.enableNewLineagePanel": true,
+    "dbt.queryScale": 1,
+    "dbt.enableNewQueryPanel": true
 }

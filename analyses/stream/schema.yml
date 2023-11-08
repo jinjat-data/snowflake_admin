@@ -1,8 +1,35 @@
 version: 2
 
+exposures:
+  - name: streams
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/arrows_up_down
+          actions:
+            delete: _delete_stream
+            refresh: refresh_stream
+          resources:
+            create: _create_stream
+            list: _list_streams
+            show: _get_stream
+            edit: _edit_stream
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
 analyses:
   - name: _create_stream
     config:
+      tags: [stream]
       jinjat: 
         request:
           body: 
@@ -11,3 +38,15 @@ analyses:
               on_resource: 
                 type: string
                 enum: ["TABLE", "VIEW", "EXTERNAL TABLE", "STAGE"]
+  - name: _list_streams
+    config:
+      tags: [stream]
+      jinjat: 
+  - name: refresh_stream
+    config:
+      tags: [stream]
+      jinjat: 
+  - name: _show_stream
+    config:
+      tags: [stream]
+      jinjat: 

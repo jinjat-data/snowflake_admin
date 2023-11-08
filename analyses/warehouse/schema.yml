@@ -1,0 +1,253 @@
+version: 2
+
+exposures:
+  - name: warehouses
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/cpu_chip
+          actions:
+            delete: _delete_warehouse
+          resources:
+            create: _create_warehouse
+            list: _list_warehouses
+            show: _show_warehouse
+            edit: _edit_warehouse
+          props:
+            create: 
+              form:
+                uischema: 
+                  type: VerticalLayout
+                  elements:
+                  - type: Control
+                    scope: "#/properties/name"
+                  - type: Control
+                    scope: "#/properties/type"
+                  - type: Control
+                    scope: "#/properties/size"
+                  - type: Control
+                    scope: "#/properties/comment"
+                  - type: Control
+                    scope: "#/properties/enable_query_acceleration"
+                  - type: Control
+                    scope: "#/properties/query_acceleration_max_scale_factor"
+                  - type: Control
+                    scope: "#/properties/auto_resume"
+                  - type: Control
+                    scope: "#/properties/auto_suspend"
+                  - type: Control
+                    scope: "#/properties/resource_monitor"
+                  - type: Control
+                    scope: "#/properties/min_cluster_count"
+                  - type: Control
+                    scope: "#/properties/max_cluster_count"
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      name: true
+                      state: true
+                      type: true
+                      size: true
+                      min_cluster_count: false
+                      max_cluster_count: false
+                      started_clusters: false
+                      running: true
+                      queued: false
+                      is_default: false
+                      is_current: false
+                      auto_suspend: false
+                      auto_resume: false
+                      available: false
+                      provisioning: false
+                      quiescing: false
+                      other: false
+                      created_on: false
+                      resumed_on: false
+                      updated_on: false
+                      owner: false
+                      comment: false
+                      enable_query_acceleration: false
+                      query_acceleration_max_scale_factor: false
+                      resource_monitor: false
+                      scaling_policy: false
+                      budget: false
+                      pendings: false
+                      failed: false
+                      suspended: false
+                      uuid: false
+
+analyses:
+  - name: _list_warehouses
+    description: "List warehouses"
+    config:
+      tags: [warehouse]
+      jinjat:
+        method: get
+    columns:
+      - name: name
+        description: Name of the warehouse
+        data_type: text
+        meta:
+          jinjat:
+            schema:
+              x-pk: true
+      - name: state
+        description: Whether the warehouse is active/running (STARTED), inactive (SUSPENDED), or resizing (RESIZING).
+        data_type: text
+      - name: type
+        description: Warehouse type; STANDARD and SNOWPARK-OPTIMIZED are the only currently supported types.
+        data_type: text
+        meta:
+          jinjat:
+            schema:
+              enum: ["STANDARD", "SNOWPARK-OPTIMIZED"]
+              type: string
+              default: "STANDARD"
+      - name: size
+        description: Size of the warehouse (X-Small, Small, Medium, Large, X-Large, etc.)
+        data_type: text
+        meta: 
+          jinjat:
+            schema:
+              enum: ["X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large"]
+              default: "X-Small"
+      - name: min_cluster_count
+        description: Minimum number of clusters for the (multi-cluster) warehouse (always 1 for single-cluster warehouses).
+        data_type: int
+        meta:
+          jinjat:
+            schema:
+              type: number
+              default: 1
+              enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      - name: max_cluster_count
+        description: Maximum number of clusters for the (multi-cluster) warehouse (always 1 for single-cluster warehouses).
+        data_type: int
+        meta:
+          jinjat:
+            schema:
+              type: number
+              default: 1
+              enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      - name: started_clusters
+        description: Number of clusters currently started.
+        data_type: int
+      - name: running
+        description: Number of SQL statements that are being executed by the warehouse.
+        data_type: int
+      - name: queued
+        description: Number of SQL statements that are queued for the warehouse.
+        data_type: int
+      - name: is_default
+        description: Whether the warehouse is the default for the current user.
+        data_type: boolean
+      - name: is_current
+        description: Whether the warehouse is in use for the session. Only one warehouse can be in use at a time for a session. To specify or change the warehouse for a session, use the USE WAREHOUSE command.
+        data_type: boolean
+      - name: auto_suspend
+        description: Period of inactivity, in seconds, after which a running warehouse will automatically suspend and stop using credits; a null or zero value indicates the warehouse never automatically suspends.
+        data_type: int
+        meta:
+          jinjat:
+            schema:
+              type: integer
+              default: 600
+              minimum: 0
+      - name: auto_resume
+        description: Whether the warehouse, if suspended, automatically resumes when a query is submitted to the warehouse.
+        data_type: boolean
+        meta:
+          jinjat:
+            schema:
+              default: true
+      - name: available
+        description: Percentage of the warehouse compute resources that are provisioned and available.
+        data_type: float
+      - name: provisioning
+        description: Percentage of the warehouse compute resources that are in the process of provisioning.
+        data_type: float 
+      - name: quiescing
+        description: Percentage of the warehouse compute resources that are executing SQL statements, but will be shut down once the queries complete.
+        data_type: float
+      - name: other
+        description: Percentage of the warehouse compute resources that are in a state other than available, provisioning, or quiescing.
+        data_type: float
+      - name: created_on
+        description: Date and time when the warehouse was created.
+        data_type: timestamp_ltz
+      - name: resumed_on
+        description: Date and time when the warehouse was last started or restarted.
+        data_type: timestamp_ltz
+      - name: updated_on
+        description: Date and time when the warehouse was last updated, which includes changing any of the properties of the warehouse or changing the state (STARTED, SUSPENDED, RESIZING) of the warehouse.
+        data_type: timestamp_ltz
+      - name: owner
+        description: Role that owns the warehouse.
+        data_type: text
+      - name: comment
+        description: Comment for the warehouse.
+        data_type: text
+      - name: enable_query_acceleration
+        description: Whether the query acceleration service is enabled for the warehouse.
+        data_type: boolean
+        meta:
+          jinjat:
+            schema:
+              type: boolean
+              default: false
+      - name: query_acceleration_max_scale_factor
+        description: Maximum scale factor for the query acceleration service.
+        data_type: int
+        meta:
+          jinjat:
+            schema:
+              type: integer
+              max_value: 100
+              min_value: 0
+              default: 8
+
+
+      - name: resource_monitor
+        description: ID of resource monitor explicitly assigned to the warehouse; controls the monthly credit usage for the warehouse.
+        data_type: text
+      - name: scaling_policy
+        description: Policy that determines when additional clusters (in a multi-cluster warehouse) are automatically started and shut down.
+        data_type: text
+      - name: budget
+        description: Name of the budget if the object is monitored by a budget. NULL otherwise.
+        data_type: text
+  - name: _show_warehouse
+    description: "Show warehouse" 
+    config:
+      tags: [warehouse]
+      jinjat:
+        response:
+          content:
+            $ref: analysis._list_warehouses 
+          transform: "[0]"
+  - name: _create_warehouse
+    description: "Create warehouses"
+    config:
+      tags: [warehouse]
+      jinjat:
+        method: post
+        fetch: true
+        request:
+          body:
+            $ref: analysis._list_warehouses
+  - name: _edit_warehouse
+    description: "Edit warehouses"
+    config:
+      tags: [warehouse]
+      jinjat:
+        fetch: true
+        method: put
+        request:
+          body:
+            $ref: analysis._list_warehouses
