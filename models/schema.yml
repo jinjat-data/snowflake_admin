@@ -1,0 +1,261 @@
+version: 2
+
+sources:
+  - name: information_schema 
+    tables:
+      - name: functions
+        description: "Contains a row for each user-defined function (UDF) or external function defined in the specified (or current) database."
+        columns:
+          - name: FUNCTION_CATALOG
+            description: "Database to which the function belongs."
+            data_type: VARCHAR
+          - name: FUNCTION_SCHEMA
+            description: "Schema to which the function belongs."
+            data_type: VARCHAR
+          - name: FUNCTION_NAME
+            description: "Function name."
+            data_type: VARCHAR
+          - name: FUNCTION_OWNER
+            description: "Name of the role that owns the function."
+            data_type: VARCHAR
+          - name: ARGUMENT_SIGNATURE
+            description: "Type signature of the function’s arguments."
+            data_type: VARCHAR
+          - name: DATA_TYPE
+            description: "Data type of the function’s return value."
+            data_type: VARCHAR
+          - name: CHARACTER_MAXIMUM_LENGTH
+            description: "Maximum length in characters of a string return value."
+            data_type: NUMBER
+          - name: CHARACTER_OCTET_LENGTH
+            description: "Maximum length in bytes of a string return value."
+            data_type: NUMBER
+          - name: NUMERIC_PRECISION
+            description: "Numeric precision of numeric return value."
+            data_type: NUMBER
+          - name: NUMERIC_PRECISION_RADIX
+            description: "Radix of precision of numeric return value."
+            data_type: NUMBER
+          - name: NUMERIC_SCALE
+            description: "Scale of numeric return value."
+            data_type: NUMBER
+          - name: FUNCTION_LANGUAGE
+            description: "Language of the function’s handler."
+            data_type: VARCHAR
+          - name: FUNCTION_DEFINITION
+            description: "Definition of the function’s handler."
+            data_type: VARCHAR
+          - name: VOLATILITY
+            description: "VOLATILE if the function is volatile; IMMUTABLE if it is immutable."
+            data_type: VARCHAR
+          - name: IS_NULL_CALL
+            description: "YES if the function is called on null input; otherwise, NO."
+            data_type: VARCHAR
+          - name: IS_SECURE
+            description: "YES if the function is secure; otherwise, NO."
+            data_type: VARCHAR
+          - name: CREATED
+            description: "Creation time of the function."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_ALTERED
+            description: "Last altered time of the function."
+            data_type: TIMESTAMP_LTZ
+          - name: COMMENT
+            description: "Comment for the function."
+            data_type: VARCHAR
+          - name: IS_EXTERNAL
+            description: "YES if the function is an external function; otherwise, NO."
+            data_type: VARCHAR
+          - name: API_INTEGRATION
+            description: "Name of the API integration object to authenticate the call to the proxy service an external function makes."
+            data_type: VARCHAR
+          - name: CONTEXT_HEADERS
+            description: "Context header information for the external function."
+            data_type: VARCHAR
+          - name: MAX_BATCH_ROWS
+            description: "Maximum number of rows in each batch sent to the proxy service for an external function."
+            data_type: NUMBER
+          - name: REQUEST_TRANSLATOR
+            description: "Name of the external function’s request translator (if any)."
+            data_type: VARCHAR
+          - name: RESPONSE_TRANSLATOR
+            description: "Name of the external function’s response translator (if any)."
+            data_type: VARCHAR
+          - name: COMPRESSION
+            description: "Type of compression used for serializing function payload."
+            data_type: VARCHAR
+          - name: IMPORTS
+            description: "Names of files (including their stage location and path) containing imported libraries."
+            data_type: VARCHAR
+          - name: HANDLER
+            description: "Name of the handler function or class."
+            data_type: VARCHAR
+          - name: TARGET_PATH
+            description: "Path to the stage in which Snowflake stores the compiled result of inline handler code."
+            data_type: VARCHAR
+          - name: RUNTIME_VERSION
+            description: "Runtime version of the function’s handler language; NULL if the function handler is written in SQL or JavaScript."
+            data_type: VARCHAR
+          - name: PACKAGES
+            description: "Names of packages specified in the PACKAGES clause of the CREATE FUNCTION statement. Currently, this column applies only when the handler is written in Python, Java, or Scala."
+            data_type: VARCHAR
+          - name: INSTALLED_PACKAGES
+            description: "Names of all packages installed by the function. This includes packages specified by the PACKAGES clause as well as their installed dependencies. Currently, this column applies only when the handler is written in Python."
+            data_type: VARCHAR
+          - name: IS_MEMOIZABLE
+            description: "YES if the function is memoizable; otherwise, NO."
+            data_type: VARCHAR
+      - name: procedures
+        description: "Contains metadata about stored procedures in the database."
+        columns:
+          - name: PROCEDURE_CATALOG
+            description: "Database which the stored procedure belongs to."
+            data_type: TEXT
+          - name: PROCEDURE_SCHEMA
+            description: "Schema which the stored procedure belongs to."
+            data_type: TEXT
+          - name: PROCEDURE_NAME
+            description: "Name of the stored procedure."
+            data_type: TEXT
+          - name: PROCEDURE_OWNER
+            description: "Name of the role that owns the stored procedure."
+            data_type: TEXT
+          - name: ARGUMENT_SIGNATURE
+            description: "Type signature of the stored procedure’s arguments."
+            data_type: TEXT
+          - name: DATA_TYPE
+            description: "Return value data type."
+            data_type: TEXT
+          - name: CHARACTER_MAXIMUM_LENGTH
+            description: "Maximum length in characters of string return value."
+            data_type: NUMBER
+          - name: CHARACTER_OCTET_LENGTH
+            description: "Maximum length in bytes of string return value."
+            data_type: NUMBER
+          - name: NUMERIC_PRECISION
+            description: "Numeric precision of numeric return value."
+            data_type: NUMBER
+          - name: NUMERIC_PRECISION_RADIX
+            description: "Radix of precision of numeric return value."
+            data_type: NUMBER
+          - name: NUMERIC_SCALE
+            description: "Scale of numeric return value."
+            data_type: NUMBER
+          - name: PROCEDURE_LANGUAGE
+            description: "Language of the stored procedure."
+            data_type: TEXT
+          - name: PROCEDURE_DEFINITION
+            description: "Stored procedure definition."
+            data_type: TEXT
+          - name: CREATED
+            description: "Creation time of the stored procedure."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_ALTERED
+            description: "Last altered time of the stored procedure."
+            data_type: TIMESTAMP_LTZ
+          - name: COMMENT
+            description: "Comment for this stored procedure."
+            data_type: TEXT
+
+      - name: stages
+        description: "Contains metadata about stages in the database."
+        columns:
+          - name: STAGE_CATALOG
+            description: "Database that the stage belongs to."
+            data_type: TEXT
+          - name: STAGE_SCHEMA
+            description: "Schema that the stage belongs to."
+            data_type: TEXT
+          - name: STAGE_NAME
+            description: "Name of the stage."
+            data_type: TEXT
+          - name: STAGE_URL
+            description: "Location of an external stage."
+            data_type: TEXT
+          - name: STAGE_REGION
+            description: "Region where the stage resides."
+            data_type: TEXT
+          - name: STAGE_TYPE
+            description: "Type of stage (Internal Named, or External Named)."
+            data_type: TEXT
+          - name: STAGE_OWNER
+            description: "Name of the role that owns the stage."
+            data_type: TEXT
+          - name: COMMENT
+            description: "Comment for this stage."
+            data_type: TEXT
+          - name: CREATED
+            description: "Creation time of the stage."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_ALTERED
+            description: "Last altered time of the stage."
+            data_type: TIMESTAMP_LTZ
+      - name: file_formats
+        description: "Contains metadata about file formats defined in the database."
+        columns:
+          - name: FILE_FORMAT_CATALOG
+            description: "Database that the file format belongs to."
+            data_type: TEXT
+          - name: FILE_FORMAT_SCHEMA
+            description: "Schema that the file format belongs to."
+            data_type: TEXT
+          - name: FILE_FORMAT_NAME
+            description: "Name of the file format."
+            data_type: TEXT
+          - name: FILE_FORMAT_OWNER
+            description: "Name of the role that owns the file format."
+            data_type: TEXT
+          - name: FILE_FORMAT_TYPE
+            description: "Type of the file format."
+            data_type: TEXT
+          - name: RECORD_DELIMITER
+            description: "Character that separates records."
+            data_type: TEXT
+          - name: FIELD_DELIMITER
+            description: "Character that separates fields."
+            data_type: TEXT
+          - name: SKIP_HEADER
+            description: "Number of lines skipped at the start of the file."
+            data_type: NUMBER
+          - name: DATE_FORMAT
+            description: "Date format."
+            data_type: TEXT
+          - name: TIME_FORMAT
+            description: "Time format."
+            data_type: TEXT
+          - name: TIMESTAMP_FORMAT
+            description: "Timestamp format."
+            data_type: TEXT
+          - name: BINARY_FORMAT
+            description: "Binary format."
+            data_type: TEXT
+          - name: ESCAPE
+            description: "String used as the escape character for any field values."
+            data_type: TEXT
+          - name: ESCAPE_UNENCLOSED_FIELD
+            description: "String used as the escape character for unenclosed field values."
+            data_type: TEXT
+          - name: TRIM_SPACE
+            description: "Whether whitespace is removed from fields."
+            data_type: TEXT
+          - name: FIELD_OPTIONALLY_ENCLOSED_BY
+            description: "Character used to enclose strings."
+            data_type: TEXT
+          - name: NULL_IF
+            description: "A list of strings to be replaced by null."
+            data_type: TEXT
+          - name: COMPRESSION
+            description: "Compression method for the data file."
+            data_type: TEXT
+          - name: ERROR_ON_COLUMN_COUNT_MISMATCH
+            description: "Whether to generate a parsing error if the number of fields in an input file does not match the number of columns in the corresponding table."
+            data_type: TEXT
+          - name: CREATED
+            description: "Creation time of the file format."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_ALTERED
+            description: "Last altered time of the file format."
+            data_type: TIMESTAMP_LTZ
+          - name: COMMENT
+            description: "Comment for this file format."
+            data_type: TEXT

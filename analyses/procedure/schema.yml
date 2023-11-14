@@ -15,14 +15,29 @@ exposures:
             show: _show_procedure
           actions:
             trigger: trigger_procedure
-        props:
+          props:
             list:
               datagrid:
+                disableColumnSelector: true
                 initialState:
                   columns:
                     columnVisibilityModel:
-                      status: false
+                      PROCEDURE_NAME: true
+                      PROCEDURE_LANGUAGE: true
+                      PROCEDURE_DEFINITION: false
+                      PROCEDURE_OWNER: false
+                      ARGUMENT_SIGNATURE: false
+                      DATA_TYPE: false
+                      CHARACTER_MAXIMUM_LENGTH: false
+                      CHARACTER_OCTET_LENGTH: false
+                      NUMERIC_PRECISION: false
+                      NUMERIC_PRECISION_RADIX: false
+                      NUMERIC_SCALE: false
+                      CREATED: true
+                      LAST_ALTERED: true
+                      COMMENT: false
 
+                    
 analyses:
   - name: _list_procedures
     description: "Show a procedure"
@@ -31,7 +46,8 @@ analyses:
       jinjat:
         method: get
         response:
-          $ref: analysis._show_procedure
+          content:
+            $ref: analysis._show_procedure
   - name: _show_procedure
     description: "Show a procedure"
     config:
@@ -40,30 +56,58 @@ analyses:
         method: get
         response:
           transform: "[0]"
+          content:
+            $ref: analysis._show_procedure
+        schema:
+          x-pk: PROCEDURE_NAME
     columns:
       - name: PROCEDURE_NAME
-        description: Name of the stored procedure
-      - name: PROCEDURE_OWNER
-        description: Name of the role that owns the stored procedure
-      - name: ARGUMENT_SIGNATURE
-        description: Type signature of the stored procedure’s arguments
-      - name: DATA_TYPE
-        description: Return value data type
+        description: "Schename and name of the stored procedure."
+        data_type: TEXT
       - name: PROCEDURE_LANGUAGE
-        description: Language of the stored procedure
+        description: "Language of the stored procedure."
+        data_type: TEXT
       - name: PROCEDURE_DEFINITION
-        description: Stored procedure definition
+        description: "Stored procedure definition."
+        data_type: TEXT
         meta:
           jinjat:
-            crud:
-              filterable: false
-              sortable: false
+            schema:
+              x-jsonforms:
+                renderer: code
+      - name: PROCEDURE_OWNER
+        description: "Name of the role that owns the stored procedure."
+        data_type: TEXT
+      - name: ARGUMENT_SIGNATURE
+        description: "Type signature of the stored procedure’s arguments."
+        data_type: TEXT
+      - name: DATA_TYPE
+        description: "Return value data type."
+        data_type: TEXT
+      - name: CHARACTER_MAXIMUM_LENGTH
+        description: "Maximum length in characters of string return value."
+        data_type: NUMBER
+      - name: CHARACTER_OCTET_LENGTH
+        description: "Maximum length in bytes of string return value."
+        data_type: NUMBER
+      - name: NUMERIC_PRECISION
+        description: "Numeric precision of numeric return value."
+        data_type: NUMBER
+      - name: NUMERIC_PRECISION_RADIX
+        description: "Radix of precision of numeric return value."
+        data_type: NUMBER
+      - name: NUMERIC_SCALE
+        description: "Scale of numeric return value."
+        data_type: NUMBER
       - name: CREATED
-        description: Creation time of the stored procedure
+        description: "Creation time of the stored procedure."
+        data_type: TIMESTAMP_LTZ
       - name: LAST_ALTERED
-        description: Last altered time of the stored procedure
+        description: "Date and time the object was last altered."
+        data_type: TIMESTAMP_LTZ
       - name: COMMENT
-        description: Comment for this stored procedure
+        description: "Comment for this stored procedure."
+        data_type: TEXT
 
   - name: _trigger_procedure
     description: Trigger a procedure

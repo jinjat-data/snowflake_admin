@@ -2,17 +2,17 @@
 {%- set query = request.query %}
 SELECT
     CONCAT(
-        procedure_schema,
+        table_schema,
         '.',
-        procedure_name
-    ) AS procedure_name,
-    procedure_language,
-    created,
-    last_altered
+        table_name
+    ) AS id,
+    {{ jinjat.generate_select(
+        query.select
+    ) }}
 FROM
     {{ source(
         'information_schema',
-        'procedures'
+        'TABLES'
     ) }}
 
     {% if query.filters is defined %}

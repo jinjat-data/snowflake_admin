@@ -1,0 +1,158 @@
+version: 2
+
+exposures:
+  - name: tables
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/code_bracket_square
+          resources:
+            list: _list_tables
+            show: _show_table
+            edit: _edit_table
+            create: _create_table
+          actions:
+            trigger: trigger_procedure
+          props:
+            list:
+              datagrid:
+                disableColumnSelector: true
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+
+analyses:
+  - name: _list_tables
+    description: "List tables"
+    config:
+      tags: [relation]
+      jinjat:
+        method: get
+  - name: _show_table
+    description: "Show table"
+    config:
+      tags: [relation]
+      jinjat:
+        method: get
+        response:
+          content:
+            $ref: analysis._show_table
+          transform: "[0]"
+    columns:
+        - name: ID
+          description: "Database that the table belongs to."
+          data_type: TEXT
+        - name: TABLE_CATALOG
+          description: "Database that the table belongs to."
+          data_type: TEXT
+        - name: TABLE_SCHEMA
+          description: "Schema that the table belongs to."
+          data_type: TEXT
+        - name: TABLE_NAME
+          description: "Name of the table."
+          data_type: TEXT
+        - name: TABLE_OWNER
+          description: "Name of the role that owns the table."
+          data_type: TEXT
+        - name: TABLE_TYPE
+          description: "Indicates the table type. Valid values are BASE TABLE, TEMPORARY TABLE, EXTERNAL TABLE, EVENT TABLE, VIEW, or MATERIALIZED VIEW."
+          data_type: TEXT
+        - name: IS_TRANSIENT
+          description: "Indicates whether this is a transient table."
+          data_type: TEXT
+        - name: CLUSTERING_KEY
+          description: "Clustering key for the table."
+          data_type: TEXT
+        - name: ROW_COUNT
+          description: "Number of rows in the table."
+          data_type: NUMBER
+        - name: BYTES
+          description: "Number of bytes accessed by a scan of the table."
+          data_type: NUMBER
+        - name: RETENTION_TIME
+          description: "Number of days that historical data is retained for Time Travel."
+          data_type: NUMBER
+        - name: SELF_REFERENCING_COLUMN_NAME
+          description: "Not applicable for Snowflake."
+          data_type: TEXT
+        - name: REFERENCE_GENERATION
+          description: "Not applicable for Snowflake."
+          data_type: TEXT
+        - name: USER_DEFINED_TYPE_CATALOG
+          description: "Not applicable for Snowflake."
+          data_type: TEXT
+        - name: USER_DEFINED_TYPE_SCHEMA
+          description: "Not applicable for Snowflake."
+          data_type: TEXT
+        - name: USER_DEFINED_TYPE_NAME
+          description: "Not applicable for Snowflake."
+          data_type: TEXT
+        - name: IS_INSERTABLE_INTO
+          description: "Not applicable for Snowflake."
+          data_type: TEXT
+        - name: IS_TYPED
+          description: "Not applicable for Snowflake."
+          data_type: TEXT
+        - name: COMMIT_ACTION
+          description: "Not applicable for Snowflake."
+          data_type: TEXT
+        - name: CREATED
+          description: "Creation time of the table."
+          data_type: TIMESTAMP_LTZ
+        - name: LAST_ALTERED
+          description: "Date and time when the table was last altered by a DDL or DML operation."
+          data_type: TIMESTAMP_LTZ
+        - name: LAST_DDL
+          description: "Timestamp of the last DDL operation performed on the table or view."
+          data_type: TIMESTAMP_LTZ
+        - name: LAST_DDL_BY
+          description: "Username of the user who performed the last DDL operation on the table or view."
+          data_type: TEXT
+        - name: AUTO_CLUSTERING_ON
+          description: "Indicates whether automatic clustering is enabled for the table."
+          data_type: BOOLEAN
+        - name: COMMENT
+          description: "Comment for this table."
+          data_type: TEXT
+        - name: IS_TEMPORARY
+          description: "Indicates whether this is a temporary table. Valid values are YES and NO."
+          data_type: TEXT
+        - name: COLUMNS
+          description: "Columns in the table."
+          data_type: VARIANT
+          meta:
+            jinjat:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                        - NUMBER
+                        - DECIMAL
+                        - FLOAT
+                        - DOUBLE
+                        - VARCHAR
+                        - BOOLEAN
+                        - DATE
+                        - DATETIME
+                        - TIME
+                        - VARIANT
+                        - OBJECT
+                        - ARRAY
+                        - GEOGRAPHY
+                        - GEOMETRY
+                    nullable:
+                      type: boolean
+                    comment:
+                      type: string
+                    ordinal:
+                      type: integer

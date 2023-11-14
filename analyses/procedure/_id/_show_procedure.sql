@@ -1,0 +1,22 @@
+{%- set request = jinjat.request() %}
+SELECT
+    CONCAT(PROCEDURE_SCHEMA, '.', PROCEDURE_NAME) AS PROCEDURE_NAME,
+    PROCEDURE_LANGUAGE,
+    PROCEDURE_DEFINITION,
+    PROCEDURE_OWNER,
+    ARGUMENT_SIGNATURE,
+    DATA_TYPE,
+    CHARACTER_MAXIMUM_LENGTH,
+    CHARACTER_OCTET_LENGTH,
+    NUMERIC_PRECISION,
+    NUMERIC_PRECISION_RADIX,
+    NUMERIC_SCALE,
+    CREATED,
+    LAST_ALTERED,
+    COMMENT
+FROM
+    {{source('information_schema', 'procedures')}}
+WHERE
+   CONCAT(PROCEDURE_SCHEMA, '.', PROCEDURE_NAME) = {{ jinjat.quote_literal(request.params.id) }}
+LIMIT
+    1

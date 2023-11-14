@@ -1,0 +1,128 @@
+version: 2
+
+sources:
+  - name: information_schema 
+    tables:
+      - name: VIEWS
+        description: "Contains metadata about views in the database, including INFORMATION_SCHEMA views."
+        columns:
+          - name: TABLE_CATALOG
+            description: "Database that the view belongs to."
+            data_type: TEXT
+          - name: TABLE_SCHEMA
+            description: "Schema that the view belongs to."
+            data_type: TEXT
+          - name: TABLE_NAME
+            description: "Name of the view."
+            data_type: TEXT
+          - name: TABLE_OWNER
+            description: "Name of the role that owns the view."
+            data_type: TEXT
+          - name: VIEW_DEFINITION
+            description: "Text of the view’s query expression."
+            data_type: TEXT
+          - name: CHECK_OPTION
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: IS_UPDATABLE
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: INSERTABLE_INTO
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: IS_SECURE
+            description: "Specifies whether the view is secure."
+            data_type: TEXT
+          - name: CREATED
+            description: "Creation time of the view."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_ALTERED
+            description: "Last altered time of the view."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_DDL
+            description: "Timestamp of the last DDL operation performed on the table or view."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_DDL_BY
+            description: "Username of the user who performed the last DDL operation on the table or view."
+            data_type: TEXT
+          - name: COMMENT
+            description: "Comment for this view."
+            data_type: TEXT
+      - name: TABLES
+        description: "Contains metadata about tables and views in the database, including INFORMATION_SCHEMA views."
+        columns:
+          - name: TABLE_CATALOG
+            description: "Database that the table belongs to."
+            data_type: TEXT
+          - name: TABLE_SCHEMA
+            description: "Schema that the table belongs to."
+            data_type: TEXT
+          - name: TABLE_NAME
+            description: "Name of the table."
+            data_type: TEXT
+          - name: TABLE_OWNER
+            description: "Name of the role that owns the table."
+            data_type: TEXT
+          - name: TABLE_TYPE
+            description: "Indicates the table type. Valid values are BASE TABLE, TEMPORARY TABLE, EXTERNAL TABLE, EVENT TABLE, VIEW, or MATERIALIZED VIEW."
+            data_type: TEXT
+          - name: IS_TRANSIENT
+            description: "Indicates whether this is a transient table."
+            data_type: TEXT
+          - name: CLUSTERING_KEY
+            description: "Clustering key for the table."
+            data_type: TEXT
+          - name: ROW_COUNT
+            description: "Number of rows in the table."
+            data_type: NUMBER
+          - name: BYTES
+            description: "Number of bytes accessed by a scan of the table."
+            data_type: NUMBER
+          - name: RETENTION_TIME
+            description: "Number of days that historical data is retained for Time Travel."
+            data_type: NUMBER
+          - name: SELF_REFERENCING_COLUMN_NAME
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: REFERENCE_GENERATION
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: USER_DEFINED_TYPE_CATALOG
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: USER_DEFINED_TYPE_SCHEMA
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: USER_DEFINED_TYPE_NAME
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: IS_INSERTABLE_INTO
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: IS_TYPED
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: COMMIT_ACTION
+            description: "Not applicable for Snowflake."
+            data_type: TEXT
+          - name: CREATED
+            description: "Creation time of the table."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_ALTERED
+            description: "Date and time when the table was last altered by a DDL or DML operation."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_DDL
+            description: "Timestamp of the last DDL operation performed on the table or view."
+            data_type: TIMESTAMP_LTZ
+          - name: LAST_DDL_BY
+            description: "Username of the user who performed the last DDL operation on the table or view."
+            data_type: TEXT
+          - name: AUTO_CLUSTERING_ON
+            description: "Indicates whether automatic clustering is enabled for the table."
+            data_type: BOOLEAN
+          - name: COMMENT
+            description: "Comment for this table."
+            data_type: TEXT
+          - name: IS_TEMPORARY
+            description: "Indicates whether this is a temporary table. Valid values are YES and NO."
+            data_type: TEXT
