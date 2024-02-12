@@ -3,6 +3,12 @@ version: 2
 exposures:
   - name: warehouses
     type: application
+    description: |
+      Warehouses are Snowflake virtual warehouses that provide compute resources for loading and querying data. It's created in a specific region and uses the data storage and compute resources of that region. A warehouse can be either a single-cluster warehouse or a multi-cluster warehouse. 
+      * Single-cluster warehouse contains a single compute cluster and is best suited for workloads that have predictable performance requirements. 
+      * Multi-cluster warehouse contains multiple compute clusters and is best suited for workloads that have unpredictable performance requirements. 
+      
+      For more information about warehouses, see [Warehouses](https://docs.snowflake.com/en/user-guide/warehouses).
     owner:
       name: Burak
       email: burak@email.com
@@ -211,8 +217,6 @@ analyses:
               max_value: 100
               min_value: 0
               default: 8
-
-
       - name: resource_monitor
         description: ID of resource monitor explicitly assigned to the warehouse; controls the monthly credit usage for the warehouse.
         data_type: text

@@ -1,0 +1,67 @@
+version: 2
+
+exposures:
+  - name: network_policy
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/globe-alt
+          actions:
+            delete: _delete_network_policy
+          resources:
+            create: _create_network_policy
+            list: _list_network_policys
+            show: _get_network_policy
+            edit: _edit_network_policy
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_network_policy
+    config:
+      tags: [network_policy]
+      jinjat:
+        response:
+          content:
+            $ref: analysis._show_network_policy
+
+  - name: _list_network_policies
+    config:
+      tags: [network_policy]
+      jinjat:
+        request:
+          body:
+            $ref: analysis._show_network_policy
+
+  - name: _edit_network_policy
+    config:
+      tags: [network_policy]
+      jinjat:
+        request:
+          body:
+            $ref: analysis._show_network_policy
+
+  - name: _show_network_policy
+    config:
+      tags: [network_policy]
+      jinjat:
+    columns:
+      - name: created_on
+        data_type: timestamp
+      - name: name
+        data_type: string
+      - name: comment
+        data_type: string
+      - name: entries_in_allowed_ip_list
+        data_type: int
+      - name: entries_in_blocked_ip_list
+        data_type: int

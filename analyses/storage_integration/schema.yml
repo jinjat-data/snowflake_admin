@@ -1,0 +1,74 @@
+version: 2
+
+exposures:
+  - name: storage_integration
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    description: https://docs.snowflake.com/en/sql-reference/sql/create-storage-integration
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/arrow_right_on_rectangle
+          actions:
+            delete: _delete_storage_integration
+          resources:
+            create: _create_storage_integration
+            list: _list_storage_integration
+            show: _get_storage_integration
+            edit: _edit_storage_integration
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_storage_integration
+    config:
+      tags: [storage_integration]
+      jinjat: 
+        response:
+          content:
+            $ref: analysis._show_storage_integration
+  - name: _list_storage_integration
+    config:
+      tags: [storage_integration]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._show_storage_integration
+  - name: _edit_storage_integration
+    config:
+      tags: [storage_integration]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._show_storage_integration
+  - name: _show_storage_integration
+    config:
+      tags: [storage_integration]
+      jinjat: 
+    columns:
+      - name: name
+        description: Name of the integration
+        data_type: string
+      - name: type
+        description: Type of the integration
+        data_type: string
+      - name: category
+        description: Category of the integration
+        data_type: string
+      - name: enabled
+        description: Current status of the integration, either TRUE (enabled) or FALSE (disabled)
+        data_type: boolean
+      - name: comment
+        description: Comment for the integration
+        data_type: string
+      - name: created_on
+        description: Date and time when the integration was created
+        data_type: timestamp
+      

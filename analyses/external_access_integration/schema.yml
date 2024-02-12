@@ -1,0 +1,78 @@
+version: 2
+
+exposures:
+  - name: external_access_integration
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    description: >
+      Creates an external access integration for access to external network locations from a UDF or procedure handler.
+      Full documentation here: https://docs.snowflake.com/en/sql-reference/sql/create-external-access-integration
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/arrow_right_on_rectangle
+          actions:
+            delete: _delete_external_access_integration
+          resources:
+            create: _create_external_access_integration
+            list: _list_external_access_integration
+            show: _show_external_access_integration
+            edit: _edit_external_access_integration
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_external_access_integration
+    config:
+      tags: [external_access_integration]
+      jinjat: 
+        response:
+          content:
+            $ref: analysis._show_external_access_integration
+  - name: _list_external_access_integration
+    config:
+      tags: [external_access_integration]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._show_external_access_integration
+    columns:
+      - name: name
+        description: Name of the integration
+        data_type: string
+      - name: type
+        description: Type of the integration
+        data_type: string
+      - name: category
+        description: Category of the integration
+        data_type: string
+      - name: enabled
+        description: Current status of the integration, either TRUE (enabled) or FALSE (disabled)
+        data_type: boolean
+      - name: comment
+        description: Comment for the integration
+        data_type: string
+      - name: created_on
+        description: Date and time when the integration was created
+        data_type: timestamp
+  - name: _edit_external_access_integration
+    config:
+      tags: [external_access_integration]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._show_external_access_integration
+  - name: _show_external_access_integration
+    config:
+      tags: [external_access_integration]
+      jinjat:
+        method: get
+    
+      

@@ -5,19 +5,18 @@ SELECT
         table_schema,
         '.',
         table_name
-    ) AS id,
-    {{ jinjat.generate_select(
-        query.select
-    ) }}
+    ) AS reference,
+    {{ jinjat.generate_select(query.select) }}
 FROM
     {{ source(
         'information_schema',
         'TABLES'
     ) }}
 
-    {% if query.filters is defined %}
     WHERE
-        {{ jinjat.generate_where(filters) }}
+    table_type = 'BASE TABLE' 
+    {% if query.filters is defined %}
+        AND {{ jinjat.generate_where(filters) }} 
     {% endif %}
 
     {% if query.sort is defined %}

@@ -11,9 +11,9 @@ exposures:
         refine:
           menu_icon: heroicons/bell
           actions:
-            delete: _delete_user
+            delete: _delete_alert
           resources:
-            create: _create_user
-            list: _list_users
-            show: _show_user
-            edit: _edit_user
+            create: _create_alert
+            list: _list_alert
+            show: _show_alert
+            edit: _edit_alert

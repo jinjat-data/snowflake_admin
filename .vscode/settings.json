@@ -1,10 +1,10 @@
 {
-    "dbt.queryLimit": 500,
+    "dbt.queryLimit": 100,
     "yaml.schemas": {
-        "../jsonschema/jinjat_yml_files.json": [
+        ".vscode/jinjat_yml_file.json": [
             "jinjat_project.yml"
         ],
-        "/Users/bkabak/Code/jinjat/snowflake_admin/test.json": [
+        ".vscode/dbt_yml_files.json": [
             "models/**/*.yml",
             "seeds/**/*.yml", 
             "macros/**/*.yml",
@@ -25,9 +25,13 @@
             "packages.yml"
         ]
     },
+    "files.associations": {
+        "*.md": "markdoc"
+    },
     "turntable.dbtVersion": "1.5",
     "turntable.warehouse": "snowflake",
     "dbt.enableNewLineagePanel": true,
     "dbt.queryScale": 1,
-    "dbt.enableNewQueryPanel": true
+    "dbt.enableNewQueryPanel": true,
+    "dbt.enableNewDocsPanel": true
 }

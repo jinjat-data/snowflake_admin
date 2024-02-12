@@ -1,0 +1,38 @@
+analyses:
+  - name: packages
+    config:
+      tags: [integration]
+    columns:
+      - name: PACKAGE_NAME
+        description: The name of the package
+        data_type: TEXT
+        meta:
+          jinjat:
+            schema:
+              type: string
+              enum: [java, python, scala]
+      - name: VERSION
+        description: The version number of the package
+        data_type: TEXT
+      - name: LANGUAGE
+        description: The programming language for the package
+        data_type: TEXT
+  - name: functions
+    config:
+      tags: [integration]
+    columns:
+      - name: PACKAGE_NAME
+        description: The name of the package
+        data_type: TEXT
+        meta:
+          jinjat:
+            schema:
+              type: string
+              enum: [java, python, scala]
+      - name: VERSION
+        description: The version number of the package
+        data_type: TEXT
+      - name: LANGUAGE
+        description: The programming language for the package
+        data_type: TEXT
+      

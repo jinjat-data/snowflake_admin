@@ -1,0 +1,364 @@
+version: 2
+
+exposures:
+  - name: file_format
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/map
+          actions:
+            delete: _delete_file_format
+          resources:
+            create: _create_file_format
+            list: _list_file_formats
+            show: _show_file_format
+            edit: _edit_file_format
+          props:
+            create:
+              form:
+                uischema:
+                  type: VerticalLayout
+                  elements:
+                    - type: Control
+                      scope: "#/properties/name"
+                    - type: Control
+                      scope: "#/properties/database_name"
+                    - type: Control
+                      scope: "#/properties/schema_name"
+                    - type: Control
+                      scope: "#/properties/type"
+                    - type: Control
+                      scope: "#/properties/owner"
+                    - type: Control
+                      scope: "#/properties/comment"
+                    - type: Control
+                      scope: "#/properties/compression"
+                    - type: Group
+                      label: Type properties
+                      elements:
+                        - type: Control
+                          scope: "#/properties/file_extension"
+                          rule: &csv_json_rule
+                            effect: SHOW
+                            condition: 
+                              scope: "#/properties/type"
+                              schema:
+                                enum: [CSV, JSON]
+                        - type: Control
+                          scope: "#/properties/trim_space"
+                          rule: *csv_json_rule
+                        - type: Control
+                          scope: "#/properties/binary_as_text"
+                          rule: *csv_json_rule
+                        - type: Control
+                          scope: "#/properties/error_on_column_count_mismatch"
+                          rule: *csv_json_rule
+                        - type: Control
+                          scope: "#/properties/record_delimiter"
+                          rule: &csv_rule
+                            effect: SHOW
+                            condition: 
+                              scope: "#/properties/type"
+                              schema:
+                                  const: CSV
+                        - type: Control
+                          scope: "#/properties/field_delimiter"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/parse_header"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/skip_blank_lines"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/date_format"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/timestamp_format"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/skip_header"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/binary_format"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/escape"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/replace_invalid_characters"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/skip_byte_order_mark"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/empty_field_as_null"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/field_optionally_enclosed_by"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/encoding"
+                          rule: *csv_rule
+                        - type: Control
+                          scope: "#/properties/binary_as_text"
+                          rule: &parquet_type
+                            effect: SHOW
+                            condition: 
+                              scope: "#/properties/type"
+                              schema:
+                                  const: Parquet
+                        - type: Control
+                          scope: "#/properties/use_logical_type"
+                          rule: *parquet_type
+                        - type: Control
+                          scope: "#/properties/preserve_space"
+                          rule: &xml_type
+                            effect: SHOW
+                            condition: 
+                              scope: "#/properties/type"
+                              schema:
+                                  const: XML
+                        - type: Control
+                          scope: "#/properties/strip_outer_element"
+                          rule: *xml_type
+                        - type: Control
+                          scope: "#/properties/disable_snowflake_data"
+                          rule: *xml_type
+                        - type: Control
+                          scope: "#/properties/disable_auto_convert"
+                          rule: *xml_type
+                        - type: Control
+                          scope: "#/properties/enable_octal"
+                          rule: &json_type
+                            effect: SHOW
+                            condition: 
+                              scope: "#/properties/type"
+                              schema:
+                                  const: XML
+                        - type: Control
+                          scope: "#/properties/allow_duplicate"
+                          rule: *json_type
+                        - type: Control
+                          scope: "#/properties/strip_outer_array"
+                          rule: *json_type
+                        - type: Control
+                          scope: "#/properties/strip_null_values"
+                          rule: *json_type
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      trim_space: false
+                      replace_invalid_characters: false
+                      null_if: false
+                      date_format: false
+                      skip_byte_order_mark: false
+                      time_format: false
+                      timestamp_format: false
+                      binary_format: false 
+                      file_extension: false
+                      record_delimiter: false
+                      field_delimiter: false
+                      parse_header: false
+                      skip_blank_lines: false
+                      skip_header: false
+                      escape: false  
+                      escape_unclosed_field: false
+                      error_on_column_count_mismatch: false
+                      empty_field_as_null: false
+                      field_optionally_enclosed_by: false
+                      encoding: false
+                      ignore_utf8_errors: false
+                      enable_octal: false
+                      allow_duplicate: false
+                      strip_outer_array: false
+                      format_options: false
+                      strip_null_values: false
+                      binary_as_text: false
+                      use_logical_type: false
+                      preserve_space: false
+                      strip_outer_element: false
+                      disable_snowflake_data: false
+                      disable_auto_convert: false
+                      compression: false
+
+analyses:
+  - name: _list_file_formats
+    config:
+      tags: [file_format]
+      jinjat:
+        method: get
+        response:
+          content:
+            $ref: analysis._edit_file_format
+  - name: _create_file_format
+    config:
+      tags: [file_format]
+      jinjat:
+        method: post
+        fetch: true
+        request:
+          body:
+            $ref: analysis._edit_file_format
+  - name: _show_file_format
+    config:
+      tags: [file_format]
+      jinjat:
+        method: get
+        response:
+  - name: _edit_file_format
+    config:
+      tags: [file_format]
+      jinjat:
+        method: patch
+        request:
+          body:
+            type: object
+            properties:
+              created_on:
+                description: Date and time when the database was created.
+                type: string
+                format: date-time
+              last_altered:
+                description: Date and time when the database was created.
+                type: string
+                format: date-time
+              name:
+                description: Name of the file format.
+                type: string
+                x-pk: true
+              database_name:
+                description: Database in which the file format is stored.
+                type: string
+                x-jinjat-enum: 
+                  ref: "analysis._list_databases"
+                  transform: "[*].name"
+              schema_name:
+                description: Schema in which the file format is stored.
+                type: string
+              type:
+                description: "File format type: CSV, JSON, Avro, ORC, Parquet, or XML."
+                type: string
+                enum:
+                  - CSV
+                  - JSON
+                  - Avro
+                  - ORC
+                  - Parquet
+                  - XML
+              owner:
+                description: Role that owns the file format.
+                type: string
+              comment:
+                description: Comment for the database.
+                type: string
+              owner_role_type:
+                description: The type of role that owns the object, either ROLE or DATABASE_ROLE. Note that Snowflake returns NULL if you delete the object because there is no owner role for a deleted object.
+                type: string
+                enum:
+                  - ROLE
+                  - DATABASE_ROLE
+              compression:
+                description: "default: auto When loading data, specifies the current compression algorithm for the data file. Snowflake uses this option to detect how an already-compressed data file was compressed so that the compressed data in the file can be extracted for loading. (See https://docs.snowflake.com/en/sql-reference/sql/create-file-format)"
+                type: string
+                enum:
+                  - AUTO
+                  - GZIP
+                  - BZ2
+                  - BROTLI
+                  - ZSTD
+                  - DEFLATE
+                  - RAW_DEFLATE
+                  - SNAPPY
+                  - NONE
+              trim_space:
+                type: boolean
+              replace_invalid_characters:
+                type: boolean
+              null_if:
+                type: array
+                items:
+                  type: string
+              # JSON & CSV types
+              date_format:
+                type: string
+                description: "default: auto"
+              skip_byte_order_mark:
+                type: boolean
+              time_format:
+                type: string
+                description: "default: auto"
+              timestamp_format:
+                type: string
+                description: "default: auto"
+              binary_format:
+                type: string
+                enum:
+                  - HEX
+                  - BASE64
+                  - UTF8
+                description: "default: HEX"
+              file_extension:
+                type: string
+              # CSV types
+              record_delimiter:
+                minLength: 1
+                type: string
+                description: "default: \n"
+              field_delimiter:
+                type: string
+                description: "default: ,"
+              parse_header:
+                type: string
+              skip_blank_lines:
+                type: string
+              skip_header:
+                type: integer
+              escape:
+                type: string
+              escape_unclosed_field:
+                type: string
+              error_on_column_count_mismatch:
+                type: boolean
+              empty_field_as_null:
+                type: boolean
+                description: "default: false"
+              field_optionally_enclosed_by:
+                type: string
+                maxLength: 1
+              encoding:
+                type: string
+                description: UTF8
+              # XML & JSON types
+              ignore_utf8_errors:
+                type: boolean
+              # JSON types
+              enable_octal:
+                type: boolean
+              allow_duplicate:
+                type: boolean
+              strip_outer_array:
+                type: boolean
+              strip_null_values:
+                type: boolean
+              # Parquet types
+              binary_as_text:
+                type: boolean
+              use_logical_type:
+                type: boolean
+              # XML types
+              preserve_space:
+                type: boolean
+              strip_outer_element:
+                type: boolean
+              disable_snowflake_data:
+                type: boolean
+              disable_auto_convert:
+                type: boolean
+              

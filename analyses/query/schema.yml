@@ -1,0 +1,27 @@
+version: 2
+
+analyses:
+  - name: _list_queries
+    description: "Get history history"
+    config:
+      tags: [query]
+      jinjat:
+        method: get
+        request:
+          parameters:
+            - name: query
+              in: query
+              schema:
+                type: string
+                description: "The query to analyze"
+                example: "SELECT * FROM public.table"
+                x-jsonforms:
+                  renderer: code
+              required: true
+        response:
+          content:
+            $ref: analysis.analyze_query
+    columns:
+      - name: explain_plan
+        description: "The plan of the query"
+        data_type: VARIANT

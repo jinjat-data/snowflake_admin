@@ -1,0 +1,176 @@
+version: 2
+
+exposures:
+  - name: stages
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    description: >
+      Creates a new named internal or external stage to use for loading data from files into Snowflake tables and unloading data from tables into files.
+      Learn more here: https://docs.snowflake.com/en/sql-reference/sql/create-stage
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/arrows_up_down
+          actions:
+            delete: _delete_stage
+          resources:
+            create: _create_stage
+            list: _list_stages
+            show: _show_stage
+            edit: _edit_stage
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_stage
+    config:
+      tags: [stage]
+      jinjat: 
+        request:
+          body:
+            type: object
+            if:
+              url:
+                type: null
+            then:
+              encryption_type:
+                enum: 
+                  - SNOWFLAKE_SSE
+                  - SNOWFLAKE_FULL
+            properties: 
+              url: 
+                type: string
+                description: > 
+                  References data files stored in a location outside of Snowflake. Currently, the following cloud storage services are supported:
+                    * Amazon S3 buckets (s3://<bucket>[/<path>/])
+                    * Google Cloud Storage buckets (gcs://<bucket>[/<path>/])
+                    * Microsoft Azure containers (azure://<account>.blob.core.windows.net/<container>[/<path>/])
+                examples:
+                  - s3://<bucket>[/<path>/]
+                  - gcs://<bucket>[/<path>/]
+                  - azure://<account>.blob.core.windows.net/<container>[/<path>/]
+                  - s3compat://{bucket}[/{path}/]
+              file_format_reference:
+                type: string
+                description: Full identifier of the File format
+                x-jinjat-enum:
+                  ref: "analysis._list_file_formats"
+                  transform: "[*].name"
+              copy_options: 
+                type: object
+                properties:
+                  on_error:
+                    type: string
+                    description: "Valid values: CONTINUE | SKIP_FILE | SKIP_FILE_num | 'SKIP_FILE_num%' | ABORT_STATEMENT"
+                  size_limit:
+                    type: integer
+                    x-jinjat-type: bytes
+                  purge:
+                    type: boolean
+                  return_failed_only:
+                    type: boolean
+                  match_by_column_name:
+                    type: string
+                    default: NONE
+                    enum:
+                      - CASE_SENSITIVE
+                      - CASE_INSENSITIVE
+                      - NONE
+                  enforce_length:
+                    type: boolean
+                  truncate_columns:
+                    type: boolean
+                  force:
+                    type: boolean
+              comment:
+                type: string
+              tags:
+                type: array
+                items:
+                  type: string
+              storage_integration:
+                type: string
+              refresh_on_create:
+                type: boolean
+              auto_refresh:
+                type: boolean
+              encryption:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum: 
+                      - SNOWFLAKE_SSE
+                      - SNOWFLAKE_FULL
+                      - AWS_CSE
+                      - AWS_SSE_KMS
+                      - GCS_SSE_KMS
+                      - AZURE_CSE
+                  kms_key_id:
+                    type: string
+                    description: >
+                      Optionally specifies the ID for the KMS-managed key used to encrypt files unloaded into the bucket. If no value is provided, your default KMS key ID is used to encrypt files on unload.
+                      Note that this value is ignored for data loading.
+
+
+  - name: _list_stage
+    config:
+      tags: [stage]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._show_stage
+  - name: _edit_stage
+    config:
+      tags: [stage]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._create_stage
+  - name: _show_stage
+    config:
+      tags: [stage]
+      jinjat: 
+        method: get
+    columns:
+      - name: created_on
+        description: Date and time when the stage was created.
+      - name: name
+        description: Name of the stage.
+      - name: database_name
+        description: Database in which the stage is stored.
+      - name: schema_name
+        description: Schema in which the stage is stored.
+      - name: url
+        description: URL for the external stage; blank for an internal stage.
+      - name: has_credentials
+        description: Indicates that the external stage has access credentials; always N for an internal stage.
+      - name: has_encryption_key
+        description: Indicates that the external stage contains encrypted files; always N for an internal stage.
+      - name: owner
+        description: Role that owns the stage.
+      - name: comment
+        description: Comment for the stage.
+      - name: region
+        description: Region where the stage is located.
+      - name: type
+        description: Indicates whether the stage is an external stage or internal stage, as well as whether the internal stage is permanent or temporary.
+      - name: cloud
+        description: Cloud provider; always NULL for an internal stage.
+      - name: notification_channel
+        description: (Deprecated) Amazon Resource Name of the Amazon SQS queue for the stage.
+      - name: storage_integration
+        description: Storage integration associated with the stage; always NULL for an internal stage.
+      - name: endpoint
+        description: The S3-compatible API endpoint associated with the stage; always NULL for stages that are not S3-compatible.
+      - name: owner_role_type
+        description: The type of role that owns the object, either ROLE or DATABASE_ROLE. Note that Snowflake returns NULL if you delete the object because there is no owner role for a deleted object.
+      - name: directory_enabled
+        description: Indicates whether the stage has a directory table enabled. Y if a directory table is enabled, N if not enabled.

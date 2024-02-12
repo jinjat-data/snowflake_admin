@@ -1,0 +1,73 @@
+version: 2
+
+exposures:
+  - name: security_integration
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/eye_slash
+          actions:
+            delete: _delete_security_integration
+          resources:
+            create: _create_security_integration
+            list: _list_security_integration
+            show: _get_security_integration
+            edit: _edit_security_integration
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_security_integration
+    config:
+      tags: [security_integration]
+      jinjat: 
+        response:
+          content:
+            $ref: analysis._show_security_integration
+  - name: _list_security_integration
+    config:
+      tags: [security_integration]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._show_security_integration
+  - name: _edit_security_integration
+    config:
+      tags: [security_integration]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._show_security_integration
+  - name: _show_security_integration
+    config:
+      tags: [security_integration]
+      jinjat: 
+    columns:
+      - name: name
+        description: Name of the integration
+        data_type: string
+      - name: type
+        description: Type of the integration
+        data_type: string
+      - name: category
+        description: Category of the integration
+        data_type: string
+      - name: enabled
+        description: Current status of the integration, either TRUE (enabled) or FALSE (disabled)
+        data_type: boolean
+      - name: comment
+        description: Comment for the integration
+        data_type: string
+      - name: created_on
+        description: Date and time when the integration was created
+        data_type: timestamp
+      

@@ -1,0 +1,66 @@
+version: 2
+
+exposures:
+  - name: pipes
+    type: application
+    description: https://docs.snowflake.com/en/sql-reference/sql/create-pipe
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/eye_slash
+          resources:
+            list: _list_pipes
+            show: _show_pipe
+            create: _create_pipe
+        props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+analyses:
+  - name: _create_pipe
+    config:
+      tags: [pipe]
+      jinjat:
+        request:
+          body:
+            type: object
+            properties: 
+              auto_ingest:
+                type: boolean
+                description: Specifies whether to automatically load data files from the specified external stage and optional path when event notifications are received from a configured message service
+              error_integration:
+                type: string
+              aws_sns_topic:
+                type: string
+              integration:
+                type: string
+              into_table_expression:
+                type: string
+                x-jinjat-type: code
+              from_stage_query:
+                type: string
+                x-jinjat-type: code
+  - name: _list_pipes
+    config:
+      tags: [pipe]
+      jinjat: 
+        method: get
+  - name: _edit_pipe
+    config:
+      tags: [pipe]
+      jinjat: 
+        method: [patch, put]
+        request:
+          body:
+            $ref: analysis._create_pipe
+  - name: _show_pipe
+    config:
+      tags: [pipe]
+      jinjat: 
+        method: get

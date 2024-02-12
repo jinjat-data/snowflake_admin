@@ -1,0 +1,133 @@
+version: 2
+
+exposures:
+  - name: dynamic_table
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/bolt
+          actions:
+            delete: _delete_dynamic_table
+          resources:
+            create: _create_dynamic_table
+            list: _list_dynamic_tables
+            show: _get_dynamic_table
+            edit: _edit_dynamic_table
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_dynamic_table
+    config:
+      tags: [dynamic_table]
+      jinjat:
+        response:
+          content:
+            $ref: analysis._show_dynamic_table
+  - name: _list_dynamic_table
+    config:
+      tags: [dynamic_table]
+      jinjat:
+        request:
+          body:
+            $ref: analysis._show_dynamic_table
+  - name: _edit_dynamic_table
+    config:
+      tags: [dynamic_table]
+      jinjat:
+        request:
+          body:
+            $ref: analysis._show_dynamic_table
+  - name: _show_dynamic_table
+    config:
+      tags: [dynamic_table]
+      jinjat:
+    columns:
+      - name: created_on
+        description: Date and time when the dynamic table was created.
+        data_type: timestamp
+
+      - name: name
+        description: Name of the dynamic table.
+        data_type: string
+
+      - name: reserved
+        description: Database in which the dynamic table is stored.
+        data_type: string
+
+      - name: schema_name
+        description: Schema in which the dynamic table is stored.
+        data_type: string
+
+      - name: cluster_by
+        description: Number of rows in the table.
+        data_type: string
+
+      - name: rows
+        description: Number of rows in the table.
+        data_type: int
+
+      - name: bytes
+        description: Number of bytes that will be scanned if the entire dynamic table is scanned in a query. Note that this number may be different than the number of actual physical bytes (i.e. bytes stored on-disk) for the table.
+        data_type: int
+
+      - name: owner
+        description: Role that owns the dynamic table.
+        data_type: string
+
+      - name: target_lag
+        description: The maximum duration that the dynamic table’s content should lag behind real time.
+        data_type: string
+
+      - name: refresh_mode
+        description: INCREMENTAL if the dynamic table will use incremental refreshes, or FULL if it will recompute the whole table on every refresh.
+        data_type: string
+
+      - name: refresh_mode_reason
+        description: Explanation for why FULL refresh mode was chosen. NULL if refresh mode is not FULL.
+        data_type: string
+
+      - name: warehouse
+        description: Warehouse that provides the required resources to perform the incremental refreshes.
+        data_type: string
+
+      - name: comment
+        description: Comment for the dynamic table.
+        data_type: string
+
+      - name: text
+        description: The text of the command that created this dynamic table (e.g. CREATE DYNAMIC TABLE ...).
+        data_type: string
+
+      - name: automatic_clustering
+        description: Whether auto-clustering is enabled on the dynamic table. Not currently supported for dynamic tables.
+        data_type: boolean
+
+      - name: scheduling_state
+        description: Displays RUNNING for dynamic tables that are actively scheduling refreshes and SUSPENDED for suspended dynamic tables.
+        data_type: string
+
+      - name: last_suspended_on
+        description: Timestamp of last suspension.
+        data_type: timestamp
+
+      - name: is_clone
+        description: TRUE if the dynamic table has been cloned, else FALSE.
+        data_type: boolean
+
+      - name: is_replica
+        description: TRUE if the dynamic table is a replica. else FALSE.
+        data_type: boolean
+
+      - name: data_timestamp
+        description: Timestamp of the data in the base object(s) that is included in the dynamic table.
+        data_type: timestamp

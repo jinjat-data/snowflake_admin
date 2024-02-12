@@ -9,10 +9,9 @@ exposures:
     meta:
       jinjat:
         refine:
-          menu_icon: heroicons/arrows_up_down
+          menu_icon: heroicons/arrow_path_rounded_square
           actions:
             delete: _delete_stream
-            refresh: refresh_stream
           resources:
             create: _create_stream
             list: _list_streams
@@ -42,11 +41,9 @@ analyses:
     config:
       tags: [stream]
       jinjat: 
-  - name: refresh_stream
-    config:
-      tags: [stream]
-      jinjat: 
+        method: get
   - name: _show_stream
     config:
       tags: [stream]
       jinjat: 
+        method: get

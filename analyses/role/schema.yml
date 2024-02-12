@@ -9,12 +9,11 @@ exposures:
     meta:
       jinjat:
         refine:
-          menu_icon: heroicons/user_group
+          menu_icon: heroicons/eye_slash
           resources:
             list: _list_roles
             show: _show_role
-          actions:
-            show_users: show_users_has_role
+            create: _create_role
         props:
             list:
               datagrid:
@@ -22,3 +21,22 @@ exposures:
                   columns:
                     columnVisibilityModel:
                       status: false
+
+
+analyses:
+  - name: _create_role
+    config:
+      tags: [role]
+      jinjat:
+  - name: _list_roles
+    config:
+      tags: [role]
+      jinjat: 
+  - name: _edit_role
+    config:
+      tags: [role]
+      jinjat: 
+  - name: _show_role
+    config:
+      tags: [role]
+      jinjat: 

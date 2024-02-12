@@ -1,0 +1,123 @@
+version: 2
+
+exposures:
+  - name: api_integration
+    type: application
+    description: >
+      Creates a new API integration object in the account, or replaces an existing API integration.
+      An API integration object stores information about an HTTPS proxy service, including information about:
+        * The cloud platform provider (e.g. Amazon AWS).
+        * The type of proxy service (in case the cloud platform provider offers more than one type of proxy service).
+        * The identifier and access credentials for a cloud platform role that has sufficient privileges to use the proxy service. For example, on AWS, the role’s ARN (Amazon resource name) serves as the identifier and access credentials.
+        * When this cloud user is granted appropriate privileges, Snowflake can use this user to access resources on the proxy service (an instance of the cloud platform’s native HTTPS proxy service, for example, an instance of an Amazon API Gateway).
+        * An API integration object also specifies allowed (and optionally blocked) endpoints and resources on those proxy services.
+      Learn more here: https://docs.snowflake.com/en/sql-reference/sql/create-api-integration
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/arrow_right_on_rectangle
+          actions:
+            delete: _delete_api_integration
+          resources:
+            create: _create_api_integration
+            list: _list_api_integration
+            show: _get_api_integration
+            edit: _edit_api_integration
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_api_integration
+    config:
+      tags: [api_integration]
+      jinjat: 
+        fetch: true
+        request:
+          body:
+            type: object
+            properties:
+              api_provider:
+               type: string
+               enum:
+                - aws_api_gateway
+                - aws_private_api_gateway
+                - aws_gov_api_gateway
+                - aws_gov_private_api_gateway
+                - azure_api_management
+                - google_api_gateway
+              enabled:
+                type: boolean
+              api_blocked_prefixes:
+                type: array
+                items:
+                 type: string
+                 format: url
+                 description: Something like https://xyz.amazonaws.com/production/
+              api_allowed_prefixes:
+                type: array
+                items:
+                 type: string
+                 format: url
+                 description: Something like https://xyz.amazonaws.com/production/
+              api_key:
+                type: string
+              comment:
+                type: string
+              # AWS specific
+              api_aws_role_arn:
+                type: string
+              # Azure specific
+              azure_tenant_id:
+                type: string
+              azure_ad_application_id:
+                type: string
+              # google specific
+              google_audience:
+                type: string
+  - name: _list_api_integrations
+    config:
+      tags: [api_integration]
+      jinjat:
+        method: get
+    columns:
+      - name: name
+        description: Name of the integration
+        data_type: string
+      - name: type
+        description: Type of the integration
+        data_type: string
+      - name: category
+        description: Category of the integration
+        data_type: string
+      - name: enabled
+        description: Current status of the integration, either TRUE (enabled) or FALSE (disabled)
+        data_type: boolean
+      - name: comment
+        description: Comment for the integration
+        data_type: string
+      - name: created_on
+        description: Date and time when the integration was created
+        data_type: timestamp
+  - name: _edit_api_integration
+    config:
+      tags: [api_integration]
+      jinjat: 
+        method: [put, patch]
+        request:
+          body:
+            $ref: analysis._create_api_integration
+  - name: _show_api_integration
+    config:
+      tags: [api_integration]
+      jinjat:
+        method: get
+    
+      

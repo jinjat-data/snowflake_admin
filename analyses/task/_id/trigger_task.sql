@@ -1,3 +1,3 @@
 {%- set request = jinjat.request() %}
 
-EXECUTE TASK identifier({{request.query.id}});
+EXECUTE TASK {{jinjat.quote_identifier(request.params.id)}}

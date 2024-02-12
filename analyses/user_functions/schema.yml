@@ -1,0 +1,93 @@
+version: 2
+
+exposures:
+  - name: user_function
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/variable
+          actions:
+            delete: _delete_user_function
+          resources:
+            create: _create_user_function
+            list: _list_user_functions
+            show: _show_user_function
+            edit: _edit_user_function
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_user_function
+    config:
+      tags: [user_function]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._list_user_function
+  - name: _list_user_function
+    config:
+      tags: [user_function]
+    columns:
+      - name: created_on
+        description: The timestamp at which the user-defined function (UDF) was created.
+      - name: name
+        description: The name of the UDF.
+      - name: schema_name
+        description: The name of the schema in which the UDF exists.
+      - name: is_builtin
+        description: Whether the UDF is built-in (always false for UDFs).
+      - name: is_aggregate
+        description: True if the UDF is an aggregate function; false otherwise.
+      - name: is_ansi
+        description: Not applicable currently.
+      - name: min_num_arguments
+        description: The minimum number of arguments to the UDF.
+      - name: max_num_arguments
+        description: The maximum number of arguments to the UDF.
+      - name: arguments
+        description: The data types of the arguments and of the return value.
+      - name: description
+        description: Description of the UDF.
+      - name: catalog_name
+        description: The name of the database in which the UDF exists.
+      - name: is_table_function
+        description: True if the UDF is a table function; false otherwise.
+      - name: valid_for_clustering
+        description: True if the UDF can be used in a CLUSTER BY expression; false otherwise.
+      - name: is_secure
+        description: True if the UDF is a secure UDF; false otherwise.
+      - name: is_external_function
+        description: Y (yes) if the function is an external function, N (no) otherwise.
+      - name: language
+        description: Specifies the language of the UDF (e.g. SQL).
+      - name: is_memoizable
+        description: Y (yes) if the function is memoizable, N (no) otherwise.
+
+      
+  - name: _edit_user_function
+    config:
+      tags: [user_function]
+      jinjat: 
+        method: [patch, put]
+        request:
+          body:
+            $ref: analysis._list_user_function
+  - name: _show_user_function
+    config:
+      tags: [user_function]
+      jinjat: 
+        method: get
+        response:
+          content:
+            $ref: analysis._list_user_function
+          transform: "[0]"
+    

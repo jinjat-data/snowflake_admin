@@ -1,3 +1,3 @@
 {%- set request = jinjat.request() %}
 
-DESCRIBE USER identifier({{jinjat.quote_literal(request.params.id)}})       
+DESCRIBE USER {{jinjat.quote_identifier(request.params.id)}}

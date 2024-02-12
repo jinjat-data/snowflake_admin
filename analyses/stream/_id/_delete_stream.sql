@@ -1,3 +1,3 @@
 {%- set request = jinjat.request() %}
 
-DROP STREAM identifier({{jinjat.quote_literal(request.params.id)}})  
+DROP STREAM {{jinjat.quote_identifier(request.params.id)}}

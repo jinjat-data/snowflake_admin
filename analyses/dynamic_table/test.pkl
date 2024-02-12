@@ -1,0 +1,30 @@
+name: String = "Writing a Template"
+
+part: Int = 3
+
+hasExercises: Boolean = true
+
+amountLearned: Float = 13.37
+
+duration: Duration = 30.min
+
+bandwidthRequirementPerSecond: DataSize = 50.MB
+
+class Language { 
+  name: String
+}
+
+bestForConfig: Language = new { 
+  name = "Pkl"
+}
+
+names = List("Pigeon", "Barn owl", "Parrot")
+
+birds {
+  for (_name in names) {
+    new {
+      name = _name
+      lifespan = 42
+    }
+  }
+}

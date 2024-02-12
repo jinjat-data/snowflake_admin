@@ -1,5 +1,5 @@
 {%- set request = jinjat.request() %}
  
-SHOW WAREHOUSES 
+DESCRIBE WAREHOUSE
  LIKE {{jinjat.quote_literal(request.params.id)}}
  

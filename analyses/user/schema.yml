@@ -138,14 +138,17 @@ analyses:
       tags: [user]
       jinjat:
         method: get
-        response:
         
   - name: _edit_user
     description: "List users"
     config:
       tags: [user]
       jinjat:
-        method: get
+        method: [post, put]
+        request:
+          body:
+            $ref: analysis._create_user
+  
   - name: _list_users
     description: "List users"
     config:
@@ -156,16 +159,16 @@ analyses:
       - name: name
         description: User's name
         data_type: text
-        meta:
-          jinjat:
-            schema:
-              x-pk: true 
       - name: created_on
         description: Date and time when the user was created
         data_type: timestamp_ltz
       - name: login_name
         description: User's login name
         data_type: text
+        meta:
+          jinjat:
+            schema:
+              x-pk: true 
       - name: display_name
         description: User's display name
         data_type: text

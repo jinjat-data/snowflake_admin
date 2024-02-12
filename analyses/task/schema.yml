@@ -245,12 +245,6 @@ analyses:
       tags: [task]
       jinjat:
         method: delete
-        request:
-          query:
-            id:
-              schema:
-                type: string
-              required: true
   - name: _edit_task
     description: "Edit exiting task"
     config:
@@ -265,27 +259,13 @@ analyses:
     config:
       tags: [task]
       jinjat:
-        method: put
-        request:
-          parameters:
-            - name: query
-              in: query
-              schema:
-                type: string
-              required: true
+        method: post
   - name: task_history
     description: "The previous runs for the task"
     config:
       tags: [task]
       jinjat:
-        method: put
-        request:
-          parameters:
-            - name: query
-              in: query
-              schema:
-                type: string
-              required: true
+        method: get
       columns:
         - name: query_id
           description: "The unique identifier of the query"

@@ -1,0 +1,51 @@
+version: 2
+
+exposures:
+  - name: shares
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/share
+          actions:
+            delete: _delete_share
+          resources:
+            create: _create_share
+            list: _list_shares
+            show: _get_share
+            edit: _edit_share
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_share
+    config:
+      tags: [share]
+      jinjat: 
+        request:
+          body: 
+            type: object
+            properties:
+              on_resource: 
+                type: string
+                enum: ["TABLE", "VIEW", "EXTERNAL TABLE", "STAGE"]
+  - name: _list_shares
+    config:
+      tags: [share]
+      jinjat: 
+  - name: _show_share
+    config:
+      tags: [share]
+      jinjat: 
+  - name: _edit_share
+    config:
+      tags: [share]
+      jinjat: 

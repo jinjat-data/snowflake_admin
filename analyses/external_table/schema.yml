@@ -1,0 +1,93 @@
+version: 2
+
+exposures:
+  - name: external_table
+    type: application
+    owner:
+      name: Burak
+      email: burak@email.com
+    meta:
+      jinjat:
+        refine:
+          menu_icon: heroicons/document_arrow_down
+          actions:
+            delete: _delete_external_table
+          resources:
+            create: _create_external_table
+            list: _list_external_tables
+            show: _get_external_table
+            edit: _edit_external_table
+          props:
+            list:
+              datagrid:
+                initialState:
+                  columns:
+                    columnVisibilityModel:
+                      status: false
+
+analyses:
+  - name: _create_external_table
+    config:
+      tags: [external_table]
+      jinjat: 
+        response:
+          content:
+            $ref: analysis._show_external_table
+  - name: _list_external_table
+    config:
+      tags: [external_table]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._show_external_table
+  - name: _edit_external_table
+    config:
+      tags: [external_table]
+      jinjat: 
+        request:
+          body:
+            $ref: analysis._show_external_table
+  - name: _show_external_table
+    config:
+      tags: [external_table]
+      jinjat: 
+    columns:
+      - name: created_on
+        description: Date and time when the external table was created.
+      - name: name
+        description: Name of the external table.
+      - name: database_name
+        description: Database for the schema for the external table.
+      - name: schema_name
+        description: Schema for the external table.
+      - name: invalid
+        description: TRUE if either the stage or file format referenced in the external table description is dropped.
+      - name: invalid_reason
+        description: Reason why the external table is invalid, when the INVALID column shows a TRUE value.
+      - name: owner
+        description: Role that owns the external table.
+      - name: comment
+        description: Comment for the external table.
+      - name: stage
+        description: Fully-qualified name of the stage referenced in the external table definition.
+      - name: location
+        description: External stage and folder path in the external table definition. NULL for external tables in an imported share in a data consumer account.
+      - name: file_format_name
+        description: Named file format in the external table definition. Does not display a file format specified in the stage definition.
+      - name: file_format_type
+        description: File format type specified in the external table definition. Does not display a file format type specified in the stage definition.
+      - name: cloud
+        description: Cloud in which the staged data files are located.
+      - name: region
+        description: Region in which the staged data files are located.
+      - name: notification_channel
+        description: Amazon Resource Name of the Amazon SQS queue for the external table.
+      - name: last_refreshed_on
+        description: Timestamp that indicates when the metadata for the external table was last synchronized with the latest set of associated files in the external stage and path, either manually or automatically.
+      - name: table_format
+        description: "Table format of the staged files referenced by the external table. Possible values: DELTA, UNSPECIFIED."
+      - name: last_refresh_details
+        description: Supports future functionality; currently NULL only.
+      - name: owner_role_type
+        description: The type of role that owns the object, either ROLE or DATABASE_ROLE. Note that Snowflake returns NULL if you delete the object because there is no owner role for a deleted object.
+      

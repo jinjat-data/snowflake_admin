@@ -15,10 +15,3 @@ WHEN
 {% endif %}
 AS
 {{request.body.definition}}
-
-
-select postgresql_table
-
-join 
-request.get('weather')
-segment_api
