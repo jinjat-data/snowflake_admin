@@ -32,7 +32,8 @@ analyses:
   - name: _create_stage
     config:
       tags: [stage]
-      jinjat: 
+      jinjat:
+        method: post
         request:
           body:
             type: object
@@ -41,13 +42,13 @@ analyses:
                 type: null
             then:
               encryption_type:
-                enum: 
+                enum:
                   - SNOWFLAKE_SSE
                   - SNOWFLAKE_FULL
-            properties: 
-              url: 
+            properties:
+              url:
                 type: string
-                description: > 
+                description: >
                   References data files stored in a location outside of Snowflake. Currently, the following cloud storage services are supported:
                     * Amazon S3 buckets (s3://<bucket>[/<path>/])
                     * Google Cloud Storage buckets (gcs://<bucket>[/<path>/])
@@ -63,7 +64,7 @@ analyses:
                 x-jinjat-enum:
                   ref: "analysis._list_file_formats"
                   transform: "[*].name"
-              copy_options: 
+              copy_options:
                 type: object
                 properties:
                   on_error:
@@ -106,7 +107,7 @@ analyses:
                 properties:
                   type:
                     type: string
-                    enum: 
+                    enum:
                       - SNOWFLAKE_SSE
                       - SNOWFLAKE_FULL
                       - AWS_CSE
@@ -118,26 +119,31 @@ analyses:
                     description: >
                       Optionally specifies the ID for the KMS-managed key used to encrypt files unloaded into the bucket. If no value is provided, your default KMS key ID is used to encrypt files on unload.
                       Note that this value is ignored for data loading.
-
-
-  - name: _list_stage
+  - name: _list_stages
     config:
       tags: [stage]
-      jinjat: 
+      jinjat:
+        method: get
         request:
           body:
             $ref: analysis._show_stage
   - name: _edit_stage
     config:
       tags: [stage]
-      jinjat: 
+      jinjat:
+        method: patch
         request:
           body:
             $ref: analysis._create_stage
+  - name: _refresh_stage
+    config:
+      tags: [stage]
+      jinjat:
+        method: put
   - name: _show_stage
     config:
       tags: [stage]
-      jinjat: 
+      jinjat:
         method: get
     columns:
       - name: created_on

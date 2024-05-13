@@ -5,7 +5,7 @@ CREATE PIPE {{jinjat.quote_identifier(request.body.name)}}
     {% for column in request.body.columns %}
         ({{column.name}}, {{column.type}})
     {% endfor %}
-  {% end %}
+  {% endif %}
  
 AS COPY INTO
 

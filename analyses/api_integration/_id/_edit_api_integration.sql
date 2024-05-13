@@ -6,4 +6,4 @@ ALTER API INTEGRATION {{ jinjat.quote_identifier(request.body.name) }}
         {% if key != 'name' %}
         {{key}} = {{jinjat.quote_identifier(value)}}
         {% endif %}
-    {% endfor }
+    {% endfor %}

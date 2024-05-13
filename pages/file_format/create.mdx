@@ -1,0 +1,39 @@
+---
+title: Get started with Markdoc
+description: How to get started with Markdoc
+---
+
+
+# Create file format2
+
+**Bold**
+
+_Italic_
+
+![Images](https://jinjat.com/img/icons/packages.svg)
+
+Lists
+- Item 1
+- Item 1
+- Item 1
+
+> Quotes
+
+`Inline codedasdas`
+
+```
+Code fences
+```
+
+<Create type="vertical">
+    <Control ref="#/properties/name" />
+    <Control ref="#/properties/database_name" />
+    <Control ref="#/properties/schema_name" />
+    <Control ref="#/properties/type" />
+    <Control ref="#/properties/owner" />
+    <Control ref="#/properties/comment" />
+    <Control ref="#/properties/compression" />
+    <Rule effect="SHOW" ref='#/properties/type' schema={{enum: ["CSV", "JSON"]}}>
+      <Control ref="file_extension" />
+    </Rule>
+</Create>

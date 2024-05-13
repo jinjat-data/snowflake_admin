@@ -1,0 +1,12 @@
+<Edit type="vertical">
+    <Control ref="#/properties/name" />
+    <Control ref="#/properties/database_name" />
+    <Control ref="#/properties/schema_name" />
+    <Control ref="#/properties/type" />
+    <Control ref="#/properties/owner" />
+    <Control ref="#/properties/comment" />
+    <Control ref="#/properties/compression" />
+    <Rule effect="SHOW" ref='#/properties/type' schema={{enum: ["CSV", "JSON"]}}>
+        <Control ref="file_extension" />
+    </Rule>
+</Edit>

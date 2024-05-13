@@ -1,4 +1,4 @@
-{%- set request = jinjat.request() %}
+{%- set request = jinjat.request(body={"name": "select 1"}) %}
 
 -- TODO: fix
 CREATE FUNCTION {{jinjat.quote_identifier(request.body.name)}} (i int)

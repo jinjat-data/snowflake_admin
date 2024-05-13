@@ -38,35 +38,36 @@ analyses:
   - name: _create_api_integration
     config:
       tags: [api_integration]
-      jinjat: 
+      jinjat:
+        method: post
         fetch: true
         request:
           body:
             type: object
             properties:
               api_provider:
-               type: string
-               enum:
-                - aws_api_gateway
-                - aws_private_api_gateway
-                - aws_gov_api_gateway
-                - aws_gov_private_api_gateway
-                - azure_api_management
-                - google_api_gateway
+                type: string
+                enum:
+                  - aws_api_gateway
+                  - aws_private_api_gateway
+                  - aws_gov_api_gateway
+                  - aws_gov_private_api_gateway
+                  - azure_api_management
+                  - google_api_gateway
               enabled:
                 type: boolean
               api_blocked_prefixes:
                 type: array
                 items:
-                 type: string
-                 format: url
-                 description: Something like https://xyz.amazonaws.com/production/
+                  type: string
+                  format: url
+                  description: Something like https://xyz.amazonaws.com/production/
               api_allowed_prefixes:
                 type: array
                 items:
-                 type: string
-                 format: url
-                 description: Something like https://xyz.amazonaws.com/production/
+                  type: string
+                  format: url
+                  description: Something like https://xyz.amazonaws.com/production/
               api_key:
                 type: string
               comment:
@@ -109,7 +110,7 @@ analyses:
   - name: _edit_api_integration
     config:
       tags: [api_integration]
-      jinjat: 
+      jinjat:
         method: [put, patch]
         request:
           body:
@@ -119,5 +120,3 @@ analyses:
       tags: [api_integration]
       jinjat:
         method: get
-    
-      

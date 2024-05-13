@@ -1,0 +1,27 @@
+
+```http test_request
+GET /api/_analysis/test?{% $queryparams %} HTTP/1.1
+Host: example.com
+User-Agent: curl/8.2.1
+```
+
+<Grid container spacing={4} columns={16}>
+  <Grid xs={8} justifyContent="center" alignItems="center">
+    <Paper>
+      <Echarts dataset={{ analysis: 'example_endpoint' }} options={{ series: { type: 'bar' } }} />
+    </Paper>
+  </Grid>
+  <Grid xs={8} justifyContent="center" alignItems="center">
+    <Paper>
+      <LineChart dataset={{ analysis: 'example_endpoint' }} x='test' />
+    </Paper>
+  </Grid>
+  <Grid xs={8} justifyContent="center" alignItems="center">
+    <Paper>
+      <KPI dataset={{ analysis: 'example_endpoint' }} />
+    </Paper>
+    <Paper>
+      <IFrame src="https://dashboard.grafana.com/3423" />
+    </Paper>
+  </Grid>
+</Grid>

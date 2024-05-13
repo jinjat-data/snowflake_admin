@@ -6,7 +6,7 @@ CREATE TABLE {{jinjat.quote_identifier(request.body.name)}}
     {% for column in request.body.columns %}
         ({{column.name}}, {{column.type}})
     {% endfor %}
-  {% end %}
+  {% endif %}
  
   {% if request.body.definition_sql != null %}
       AS {{request.body.definition_sql}}

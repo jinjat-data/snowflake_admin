@@ -5,11 +5,11 @@ analyses:
     description: "Get history history"
     config:
       tags: [query]
-      jinjat:
+      jinjat: 
         method: get
         request:
           parameters:
-            - name: query
+            - name: query 
               in: query
               schema:
                 type: string
@@ -20,7 +20,7 @@ analyses:
               required: true
         response:
           content:
-            $ref: analysis.analyze_query
+            $ref: analysis._list_queries
     columns:
       - name: explain_plan
         description: "The plan of the query"

@@ -13,7 +13,7 @@
         "https://raw.githubusercontent.com/dbt-labs/dbt-jsonschema/main/schemas/dbt_yml_files.json": [
             "models/**/*.yml",
             "seeds/**/*.yml",
-            "macros/**/*.yml",
+            "macros/**/*.yml", 
         ],
         "https://raw.githubusercontent.com/dbt-labs/dbt-jsonschema/main/schemas/dbt_project.json": [
             "dbt_project.yml"
@@ -26,7 +26,7 @@
         ]
     },
     "files.associations": {
-        "*.md": "markdoc"
+        "*.md": "mdx"
     },
     "turntable.dbtVersion": "1.5",
     "turntable.warehouse": "snowflake",

@@ -1029,7 +1029,7 @@
         "jinjat_analysis_config": {
             "type": "object",
             "additionalProperties": false,
-            "required": "method",
+            "required": ["method"],
             "properties": {
                 "openapi": {
                     "$ref": "http://json-schema.org/draft-07/schema"
@@ -1076,7 +1076,7 @@
                             "description": "Transform the query result with Jmespath. The value `[0]` extracts the first element from an array"
                         },
                         "parameters": {
-                            "$ref": "http://json-schema.org/draft-07/schema"
+                            "$ref": "http://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference"
                         }
                     },
                     "additionalProperties": false

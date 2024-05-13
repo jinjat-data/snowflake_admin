@@ -17,7 +17,7 @@ exposures:
             delete: _delete_external_access_integration
           resources:
             create: _create_external_access_integration
-            list: _list_external_access_integration
+            list: _list_external_access_integrations
             show: _show_external_access_integration
             edit: _edit_external_access_integration
           props:
@@ -33,16 +33,18 @@ analyses:
     config:
       tags: [external_access_integration]
       jinjat: 
+        method: post
         response:
           content:
-            $ref: analysis._show_external_access_integration
-  - name: _list_external_access_integration
+            $ref: analysis._list_external_access_integrations
+  - name: _list_external_access_integrations
     config:
       tags: [external_access_integration]
       jinjat: 
+        method: get
         request:
           body:
-            $ref: analysis._show_external_access_integration
+            $ref: analysis._list_external_access_integrations
     columns:
       - name: name
         description: Name of the integration
@@ -66,13 +68,18 @@ analyses:
     config:
       tags: [external_access_integration]
       jinjat: 
+        method: put
         request:
           body:
-            $ref: analysis._show_external_access_integration
+            $ref: analysis._list_external_access_integrations
   - name: _show_external_access_integration
     config:
       tags: [external_access_integration]
       jinjat:
         method: get
+        response:
+          transform: "[0]"
+          content:
+            $ref: analysis._list_external_access_integrations
     
       

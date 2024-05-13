@@ -6,7 +6,7 @@ ALTER STAGE {{request.body.name}}
     COPY_OPTIONS = (
         {% for key, value in request.body.copy_options.items() %}
             {{key}} = {{jinjat.quote_identifier(value)}}
-        {% endfor }
+        {% endfor %}
     )
     COMMENT = {{jinjat.quote_literal(request.body.comment)}}
     TAG = {{jinjat.quote_literal(request.body.tags)}}
@@ -14,7 +14,7 @@ ALTER STAGE {{request.body.name}}
     ENCRYPTION = (
         {% for key, value in request.body.encryption.items() %}
             {{key}} = {{jinjat.quote_identifier(value)}}
-        {% endfor }
+        {% endfor %}
     )
     REFRESH_ON_CREATE = {{jinjat.quote_literal(request.body.refresh_on_create)}}
     AUTO_REFRESH = {{jinjat.quote_literal(request.body.auto_refresh)}}

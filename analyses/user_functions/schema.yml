@@ -30,10 +30,11 @@ analyses:
     config:
       tags: [user_function]
       jinjat: 
+        method: post
         request:
           body:
-            $ref: analysis._list_user_function
-  - name: _list_user_function
+            $ref: analysis._list_user_functions
+  - name: _list_user_functions
     config:
       tags: [user_function]
     columns:
@@ -80,7 +81,7 @@ analyses:
         method: [patch, put]
         request:
           body:
-            $ref: analysis._list_user_function
+            $ref: analysis._list_user_functions
   - name: _show_user_function
     config:
       tags: [user_function]
@@ -88,6 +89,6 @@ analyses:
         method: get
         response:
           content:
-            $ref: analysis._list_user_function
+            $ref: analysis._list_user_functions
           transform: "[0]"
     
