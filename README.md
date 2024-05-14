@@ -20,6 +20,7 @@ Try running the following commands:
 git clone https://github.com/jinjat-data/jinjat
 git clone https://github.com/jinjat-data/snowflake_admin
 
+# Run Backend
 cd jinjat
 poetry env use python3.9
 poetry install 
@@ -27,4 +28,11 @@ poetry install
 poetry add dbt-snowflake==1.5.0
 poetry run dbt deps --project-dir ../snowflake_admin/
 poetry run jinjat serve --host 127.0.0.1 --project-dir ../snowflake_admin/
+
+# If you're working on Next.js app, start dev process to watch for changes
+cd src/ui && npm install
+cd packages/core && npm run dev
+
+# Start Next.js app
+# cd ../../snowflake_admin && npm run serve
 ```
