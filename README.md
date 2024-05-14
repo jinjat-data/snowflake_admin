@@ -13,3 +13,18 @@ Try running the following commands:
 - Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
 - Find [dbt events](https://events.getdbt.com) near you
 - Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+
+# Development
+
+```commandline
+git clone https://github.com/jinjat-data/jinjat
+git clone https://github.com/jinjat-data/snowflake_admin
+
+cd jinjat
+poetry env use python3.9
+poetry install 
+
+poetry add dbt-snowflake==1.5.0
+poetry run dbt deps --project-dir ../snowflake_admin/
+poetry run jinjat serve --host 127.0.0.1 --project-dir ../snowflake_admin/
+```

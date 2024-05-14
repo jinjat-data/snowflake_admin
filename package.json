@@ -7,9 +7,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.8.2",
-    "@jinjatdata/core": "file:/Users/bkabak/Code/tests/refine-master/packages/core",
-    "@markdoc/markdoc": "^0.4.0",
-    "@markdoc/next.js": "file:/Users/bkabak/Code/jinjat/markdoc-next.js",
+    "@jinjatdata/core": "file:../jinjat/src/ui/packages/core",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
     "@mui/material": "^5.11.10",
